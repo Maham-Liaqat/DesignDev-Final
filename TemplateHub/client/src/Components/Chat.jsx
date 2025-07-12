@@ -9,8 +9,9 @@ import { BsEmojiSmile } from 'react-icons/bs';
 import styled from 'styled-components';
 import VoiceNotePlayer from './VoiceNotePlayer';
 import Footer from './Footer';
+import API_CONFIG from '../config/api';
 
-const API_URL = "http://localhost:8080";
+const API_URL = API_CONFIG.BASE_URL;
 
 const getProfileImageUrl = (path, username) => {
   if (!path) {

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { loadStripe } from '@stripe/stripe-js';
 import { ToastContainer, toast } from 'react-toastify';
+import API_CONFIG from '../config/api';
 
 const Template = () => {
   const { id } = useParams(); // 👈 get ID from URL
@@ -11,7 +12,7 @@ const Template = () => {
   const [averageRating, setAverageRating] = useState(0);
   const [sellerId, setSellerId] = useState(null);
 
-  const API_URL = "http://localhost:8080";
+  const API_URL = API_CONFIG.BASE_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,14 +28,14 @@ const Template = () => {
         console.log("Template fetched:", response.data);
         setTemplate(response.data);
   
-        // Fetch reviews for this template
+                // Fetch reviews for this template
         fetchReviews(response.data._id);
-  
+
         if (response.data.sellerId) {
           setSellerId(response.data.sellerId);
         } else if (response.data.email) {
           // Fetch user by email to get sellerId
-          const userRes = await axios.get(`${API_URL}/profile/by-email/${response.data.email}`);
+          const userRes = await axios.get(`${API_CONFIG.BASE_URL}/profile/by-email/${response.data.email}`);
           setSellerId(userRes.data.user._id);
         }
       } catch (error) {
@@ -42,9 +43,9 @@ const Template = () => {
       }
     };
   
-    const fetchReviews = async (templateId) => {
-      try {
-        const res = await axios.get(`http://localhost:8080/api/reviews/template/${templateId}`);
+      const fetchReviews = async (templateId) => {
+    try {
+      const res = await axios.get(`${API_CONFIG.BASE_URL}/api/reviews/template/${templateId}`);
         console.log("Reviews fetched:", res.data);
         setReviews(res.data);
   
@@ -99,7 +100,7 @@ const Template = () => {
       console.log('Creating payment session with:', paymentData);
 
       // 4. Create Stripe session
-      const response = await axios.post('http://localhost:8080/profile', paymentData, {
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/profile`, paymentData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -137,12 +138,12 @@ const Template = () => {
       // Fetch seller userId by email (if not already available)
       let sellerId = template.sellerId;
       if (!sellerId && template.email) {
-        const res = await axios.get(`http://localhost:8080/profile/by-email/${template.email}`);
+        const res = await axios.get(`${API_CONFIG.BASE_URL}/profile/by-email/${template.email}`);
         sellerId = res.data.user._id;
       }
       // Create or get conversation
       const convRes = await axios.post(
-        "http://localhost:8080/api/chat/conversations",
+        `${API_CONFIG.BASE_URL}/api/chat/conversations`,
         { recipientId: sellerId },
         { headers: { Authorization: `Bearer ${token}` } }
       );

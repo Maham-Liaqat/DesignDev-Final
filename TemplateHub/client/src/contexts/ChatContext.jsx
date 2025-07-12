@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import API_CONFIG from '../config/api';
 
 const ChatContext = createContext();
 export const useChat = () => useContext(ChatContext);
@@ -11,7 +12,7 @@ export const ChatProvider = ({ children }) => {
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    const newSocket = io("http://localhost:8080", { transports: ["websocket"] });
+    const newSocket = io(API_CONFIG.BASE_URL, { transports: ["websocket"] });
     setSocket(newSocket);
 
     newSocket.on("typing", ({ userId }) => {

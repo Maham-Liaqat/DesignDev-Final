@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./ReviewPage.css";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import API_CONFIG from '../config/api';
 const ReviewPage = () => {
   const [activeStars, setActiveStars] = useState(0);
   const [hoverStars, setHoverStars] = useState(0);
@@ -33,7 +34,7 @@ const navigate=useNavigate()
     };
   
     try {
-      const res = await fetch("http://localhost:8080/api/reviews", {
+      const res = await fetch(`${API_CONFIG.BASE_URL}/api/reviews`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

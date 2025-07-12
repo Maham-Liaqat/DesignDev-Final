@@ -4,6 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios";
 import Input from "./Input";
 import './Navbar.css';
+import API_CONFIG from '../config/api';
 
 const Navbar = ({ searchTerm, setSearchTerm }) => {
   const navigate = useNavigate();
@@ -75,12 +76,12 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8080/signup", formData);
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/signup`, formData);
       console.log("Signup response:", response.data);
 
       // Only proceed to login if signup was successful (status 201 or 200)
       if (response.status === 201 || response.status === 200) {
-        const res = await axios.post("http://localhost:8080/login", {
+        const res = await axios.post(`${API_CONFIG.BASE_URL}/login`, {
           email: formData.email,
           password: formData.password
         });
@@ -113,7 +114,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:8080/login", {
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/login`, {
         identifier: formData.identifier,
         password: formData.password
       });

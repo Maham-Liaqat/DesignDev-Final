@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import API_CONFIG from '../config/api';
 
 const Success = () => {
   const location = useLocation();
@@ -16,7 +17,7 @@ const Success = () => {
         const filename = sourcePath.split(/\\|\//).pop();
         
         // Create the correct download URL (pointing to backend)
-        const downloadUrl = `http://localhost:8080/uploads/${filename}`;
+        const downloadUrl = `${API_CONFIG.BASE_URL}/uploads/${filename}`;
         
         // Create and trigger download link
         const link = document.createElement('a');

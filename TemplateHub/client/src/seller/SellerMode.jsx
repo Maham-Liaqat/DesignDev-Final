@@ -3,6 +3,7 @@ import "./sellerMode.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import API_CONFIG from '../config/api';
 
 const SellerMode = () => {
   const [formData, setFormData] = useState({
@@ -139,12 +140,12 @@ const SellerMode = () => {
           "Content-Type": "multipart/form-data",
         },
       };
-      console.log("Uploading to: http://localhost:8080/create");
+      console.log("Uploading to: " + API_CONFIG.BASE_URL + "/create");
       for (let pair of formDataToSend.entries()) {
         console.log(pair[0]+ ': ' + pair[1]);
       }
       const res = await axios.post(
-        "http://localhost:8080/create",
+        `${API_CONFIG.BASE_URL}/create`,
         formDataToSend,
         config
       );

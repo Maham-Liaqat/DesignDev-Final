@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Fuse from "fuse.js";
 import Input from "./Input";
+import API_CONFIG from '../config/api';
 
 const TemplateList = ({ searchTerm, setSearchTerm }) => {
   const [templates, setTemplates] = useState([]);
@@ -11,7 +12,7 @@ const TemplateList = ({ searchTerm, setSearchTerm }) => {
 
   const getSellers = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/get");
+      const response = await axios.get(`${API_CONFIG.BASE_URL}/get`);
       setTemplates(response.data);
       return response.data;
     } catch (error) {

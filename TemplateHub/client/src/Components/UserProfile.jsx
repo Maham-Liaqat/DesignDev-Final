@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaGithub, FaLinkedin, FaTwitter, FaMapMarkerAlt, FaEdit, FaStar, FaFileAlt, FaChartLine, FaClock, FaTrash } from 'react-icons/fa';
+import API_CONFIG from '../config/api';
 
-const API_URL = 'http://localhost:8080';
+const API_URL = API_CONFIG.BASE_URL;
 const darkText = { color: '#222' };
 const accent = { color: '#ff7f50' };
 
