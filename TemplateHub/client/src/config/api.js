@@ -1,7 +1,7 @@
 // API Configuration
 const API_CONFIG = {
   // Development URL (localhost)
-  DEV_URL: 'http://localhost:8080',
+  DEV_URL: 'https://designdev-final.onrender.com',
   // Production URL (Vercel)
   PROD_URL: 'https://design-dev-final-api.vercel.app',
   // Use production URL by default, but can be overridden for development
