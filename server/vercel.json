@@ -11,7 +11,12 @@
       "config": {
         "distDir": "dist",
         "installCommand": "cd client && npm install",
-        "buildCommand": "cd client && npm run build"
+        "buildCommand": "cd client && npm run build",
+        "includeFiles": [
+          "client/public/**",
+          "client/assets/**",
+          "client/node_modules/**"
+        ]
       }
     }
   ],
@@ -21,12 +26,27 @@
       "dest": "/backend/$1"
     },
     {
-      "src": "/assets/(.*)",
-      "dest": "/client/dist/assets/$1"
+      "src": "/(assets/.+)",
+      "dest": "/client/dist/$1"
+    },
+    {
+      "src": "/(node_modules/.+)",
+      "dest": "/client/dist/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/client/dist/$1"
+      "dest": "/client/dist/$1",
+      "continue": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/assets/(.*)",
+      "destination": "/client/dist/assets/$1"
+    },
+    {
+      "source": "/libs/(.*)",
+      "destination": "/client/dist/libs/$1"
     }
   ]
 }
