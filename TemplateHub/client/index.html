@@ -68,17 +68,34 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
-    <!-- Theme JS -->
-    <script src="/assets/js/theme.min.js"></script>
 
-    <!-- Initialize libraries -->
-    <script>
-      // Initialize Flickity if needed
-      if (typeof Flickity !== 'undefined') {
-        new Flickity('.carousel', { /* options */ });
-      }
-      
-      // Initialize other libraries as needed
-    </script>
+    <!-- Before theme.min.js -->
+<script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.js"></script>
+<script>
+  // Initialize libraries
+  document.addEventListener('DOMContentLoaded', function() {
+    // Jarallax
+    if (typeof jarallax !== 'undefined') {
+      jarallax(document.querySelectorAll('.jarallax'), {
+        disableParallax: /iPad|iPhone|iPod|Android/,
+        disableVideo: /iPad|iPhone|iPod|Android/
+      });
+    }
+
+    // Flickity
+    const carousels = document.querySelectorAll('.carousel');
+    if (carousels.length > 0 && typeof Flickity !== 'undefined') {
+      carousels.forEach(el => {
+        new Flickity(el, {
+          cellAlign: 'left',
+          contain: true,
+          pageDots: false
+        });
+      });
+    }
+  });
+</script>
+
+
   </body>
 </html>
