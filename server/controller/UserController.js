@@ -1,0 +1,199 @@
+const User = require("../model/UserModel");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const Seller = require("../model/SellerMods");
+const Review = require("../model/ReviewModel");
+const StatsService = require("../services/StatsService");
+
+// ✅ Signup Controller
+const HandleSignup = async (req, res) => {
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    return res.status(400).json({ success: false, error: "All fields are required" });
+  }
+
+  try {
+    const findUser = await User.findOne({ email });
+    if (findUser) {
+      return res.status(409).json({ success: false, error: "Email already exists" });
+    }
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({ username, email, password: hashPassword });
+    await newUser.save();
+
+    res.status(201).json({ success: true, message: "User registered successfully!" ,newUser});
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// ✅ Login Controller
+const HandleLogin = async (req, res) => {
+  try {
+    let { identifier, password } = req.body;
+    if (!identifier || !password) {
+      return res.status(400).json({ success: false, error: "Username/email and password are required" });
+    }
+    password = String(password);
+    // Find user by email or username
+    const findUser = await User.findOne({
+      $or: [
+        { email: identifier.toLowerCase() },
+        { username: identifier }
+      ]
+    });
+    if (!findUser) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+    const isPasswordValid = await bcrypt.compare(password, findUser.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ success: false, error: "Invalid password" });
+    }
+    const token = jwt.sign(
+      { userId: findUser._id, email: findUser.email },
+      process.env.SECRET_KEY,
+      { expiresIn: "24h" }
+    );
+    res.status(200).json({
+      success: true,
+      message: "Login successful!",
+      token,
+      username: findUser.username,
+      userId: findUser._id,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// ✅ Get User Profile (public)
+const getUserProfile = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId).select('-password');
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// ✅ Update Own Profile
+const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.userId; // Set by auth middleware
+    const updateFields = { ...req.body };
+    // Prevent password/email update here for security
+    delete updateFields.password;
+    delete updateFields.email;
+
+    // Handle profile image upload
+    if (req.file) {
+      updateFields.profileImage = req.file.path;
+    }
+
+    // Handle socialLinks as an object if sent as flat fields
+    if (updateFields['socialLinks.github'] || updateFields['socialLinks.linkedin'] || updateFields['socialLinks.twitter']) {
+      updateFields.socialLinks = {
+        github: updateFields['socialLinks.github'] || '',
+        linkedin: updateFields['socialLinks.linkedin'] || '',
+        twitter: updateFields['socialLinks.twitter'] || '',
+      };
+      delete updateFields['socialLinks.github'];
+      delete updateFields['socialLinks.linkedin'];
+      delete updateFields['socialLinks.twitter'];
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateFields },
+      { new: true, runValidators: true }
+    ).select('-password');
+    res.status(200).json({ success: true, user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// ✅ Get User Template Stats (count and average rating)
+const getUserTemplateStats = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    
+    // Use StatsService to get comprehensive stats
+    const stats = await StatsService.calculateAllStats(userId);
+    
+    res.status(200).json({ 
+      success: true, 
+      templateCount: stats.templatesUploaded, 
+      avgRating: stats.averageRating.toFixed(2),
+      totalSales: stats.totalSales,
+      totalRevenue: stats.totalRevenue,
+      responseRate: stats.responseRate,
+      averageResponseTime: stats.averageResponseTime
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// Get user by email (for chat)
+const getUserByEmail = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// Get comprehensive user stats
+const getUserComprehensiveStats = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    
+    const stats = await StatsService.getUserDetailedStats(userId);
+    
+    res.status(200).json({ 
+      success: true, 
+      stats,
+      user: {
+        username: user.username,
+        profileImage: user.profileImage,
+        bio: user.bio,
+        location: user.location,
+        socialLinks: user.socialLinks,
+        createdAt: user.createdAt
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+module.exports = { 
+  HandleSignup, 
+  HandleLogin, 
+  getUserProfile, 
+  updateUserProfile, 
+  getUserTemplateStats, 
+  getUserByEmail,
+  getUserComprehensiveStats
+};

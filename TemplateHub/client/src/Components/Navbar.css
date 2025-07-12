@@ -1,0 +1,169 @@
+/* Responsive Navbar Styles */
+
+/* .custom-navbar {
+  background: #23234c;
+  border-bottom: 1px solid #333;
+} */
+
+.navbar-brand-img {
+  height: 60px;
+}
+
+@media (max-width: 991.98px) {
+  .custom-navbar .navbar-collapse {
+    background: #23234c;
+    padding: 1rem 0;
+    border-radius: 0 0 10px 10px;
+  }
+  .custom-navbar .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .custom-navbar .nav-link {
+    padding: 0.75rem 1rem;
+    width: 100%;
+    font-size: 1.1rem;
+  }
+  .custom-navbar .d-xl-block {
+    display: none !important;
+  }
+  .custom-navbar .d-block.d-xl-none {
+    display: block !important;
+  }
+  .custom-navbar .w-100 {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .custom-navbar .navbar-brand-img {
+    height: 32px;
+  }
+  .custom-navbar .nav-link {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Make search bar full width on mobile */
+.custom-navbar .w-100 input[type="search"] {
+  width: 100%;
+  min-width: 0;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Hamburger icon override for better visibility */
+.navbar-toggler {
+  border: none;
+  background: transparent;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.7%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.hero-content-container {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent for contrast */
+  padding: 2rem 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+  max-width: 600px;
+  width: 100%;
+}
+
+.hero-content h1 {
+  margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 767.98px) {
+  .hero-content {
+    padding: 1rem 0.5rem;
+    max-width: 95vw;
+  }
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+} 
+
+/* Mobile dropdown menu styles */
+@media (max-width: 1199.98px) {
+  .custom-navbar .navbar-collapse {
+    background: #23234c;
+    color: #fff;
+    max-width: 45vw;
+    margin: 0 13rem;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3000;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .custom-navbar .navbar-nav .nav-link {
+    color: #fff !important;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 0 0rem;
+  }
+  .custom-navbar .navbar-nav .nav-link:last-child {
+    border-bottom: none;
+  }
+  .mobile-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    color: #fff;
+    background: none;
+    border: none;
+    z-index: 10;
+    cursor: pointer;
+  }
+} 
+
+.custom-navbar {
+  z-index: 2000;
+} 
+
+.btn-theme {
+  background-color: #FFC78B !important;
+  color: #222 !important;
+  border: none !important;
+  border-radius: 24px !important;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+  font-size: 14px;
+}
+.btn-theme:hover, .btn-theme:focus {
+  background-color: #ffb55c !important;
+  color: #222 !important;
+}
+
+/* Rounded dropdown menu for Become button */
+.dropdown-menu[aria-labelledby="becomeDropdown"],
+.dropdown-menu.show[aria-labelledby="becomeDropdown"] {
+  border-radius: 24px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  font-size: 14px;
+} 
+
