@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./Inbox.module.css";
-import Navbar from "./Navbar";
 
 const Inbox = () => {
   // Placeholder for future conversations logic
@@ -8,7 +7,6 @@ const Inbox = () => {
 
   return (
     <div className={styles.pageWrapper}>
-      <Navbar />
       <div className={styles.mainContent}>
         <div className={styles.leftColumn}>
           <div className={styles.card}>
