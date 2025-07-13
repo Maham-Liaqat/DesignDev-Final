@@ -1,35 +1,39 @@
 import React, { useEffect, useRef } from 'react'
 
 const FeaturedTemplate = () => {
-
-
     const flickityRef = useRef(null);
 
   useEffect(() => {
-    // Initialize Flickity when the component mounts
-    const flkty = new Flickity(flickityRef.current, {
-      pageDots: false,
-      prevNextButtons: true,
-      cellAlign: 'left',
-      wrapAround: true,
-      imagesLoaded: true,
-      // Add other options as needed
-    });
+    // Check if Flickity is available globally
+    if (typeof window !== 'undefined' && window.Flickity) {
+      try {
+        // Initialize Flickity when the component mounts
+        const flkty = new window.Flickity(flickityRef.current, {
+          pageDots: false,
+          prevNextButtons: true,
+          cellAlign: 'left',
+          wrapAround: true,
+          imagesLoaded: true,
+          // Add other options as needed
+        });
 
-    // Optionally, if Flickity relies on images being loaded, you might need to update it:
-    flkty.reloadCells();
+        // Optionally, if Flickity relies on images being loaded, you might need to update it:
+        flkty.reloadCells();
 
-    
-    return () => {
-      flkty.destroy();
-    };
+        return () => {
+          if (flkty && typeof flkty.destroy === 'function') {
+            flkty.destroy();
+          }
+        };
+      } catch (error) {
+        console.warn('Flickity initialization failed:', error);
+      }
+    }
   }, []);
-
-
 
   return (
     <>
-        <section className="pt-5 pb-9 pt-md-11 bg-dark bg-cover jarallax" data-jarallax="" data-speed=".8" style={{backgroundImage: "url(src/assets/img/illustrations/illustration-3.svg)"}}>
+        <section className="pt-5 pb-9 pt-md-11 bg-dark bg-cover jarallax" data-jarallax="" data-speed=".8" style={{backgroundImage: "url(/assets/img/illustrations/illustration-3.svg)"}}>
         <div className="container">
             <div className="text-center mb-5 mb-md-8">
                 <h1 className="text-white mb-1">Popular Template</h1>
@@ -73,7 +77,7 @@ const FeaturedTemplate = () => {
                         <div className="card-footer px-2 pb-2 mb-1 pt-4 position-relative">
                             <a href="#" className="d-block">
                                 <div className="avatar sk-fade-right avatar-xl badge-float position-absolute top-0 right-0 mt-n6 me-5 rounded-circle shadow border border-white border-w-lg">
-                                    <img src="src/assets/img/avatars/avatar-1.jpg" alt="..." className="avatar-img rounded-circle"/>
+                                    <img src="/assets/img/avatars/avatar-1.jpg" alt="..." className="avatar-img rounded-circle"/>
                                 </div>
                             </a>
 
@@ -139,7 +143,7 @@ const FeaturedTemplate = () => {
                         <div className="card-footer px-2 pb-2 mb-1 pt-4 position-relative">
                             <a href="#" className="">
                                 <div className="avatar avatar-xl sk-fade-right badge-float position-absolute top-0 right-0 mt-n6 me-5 rounded-circle shadow border border-white border-w-lg">
-                                    <img src="src/assets/img/avatars/avatar-2.jpg" alt="..." className="avatar-img rounded-circle"/>
+                                    <img src="/assets/img/avatars/avatar-2.jpg" alt="..." className="avatar-img rounded-circle"/>
                                 </div>
                             </a>
 
@@ -199,26 +203,22 @@ const FeaturedTemplate = () => {
                             <a href="#" className="card-img sk-thumbnail d-block">
                                 <img className="rounded shadow-light-lg" src="https://assets.justinmind.com/wp-content/uploads/2024/07/hero-image-examples-design-summit.png" alt="..."/>
                             </a>
-
-                            <span className="badge sk-fade-bottom badge-lg badge-purple badge-pill badge-float bottom-0 left-0 mb-4 ms-4">
-                                <span className="text-white text-uppercase fw-bold font-size-xs">Featured</span>
-                            </span>
                         </div>
 
                         {/* <!-- Footer --> */}
                         <div className="card-footer px-2 pb-2 mb-1 pt-4 position-relative">
                             <a href="#" className="">
                                 <div className="avatar avatar-xl sk-fade-right badge-float position-absolute top-0 right-0 mt-n6 me-5 rounded-circle shadow border border-white border-w-lg">
-                                    <img src="src/assets/img/avatars/avatar-3.jpg" alt="..." className="avatar-img rounded-circle"/>
+                                    <img src="/assets/img/avatars/avatar-3.jpg" alt="..." className="avatar-img rounded-circle"/>
                                 </div>
                             </a>
 
                             {/* <!-- Preheading --> */}
-                            <a href="#"><span className="mb-1 d-inline-block text-gray-800">Photography</span></a>
+                            <a href="#"><span className="mb-1 d-inline-block text-gray-800">Design</span></a>
 
                             {/* <!-- Heading --> */}
                             <div className="position-relative">
-                                <a href="#" className="d-block stretched-link"><h4 className="line-clamp-2 h-md-48 h-lg-58 me-md-6 me-lg-10 me-xl-4 mb-2">Learn Figma: User Interface Design Essentials - UI/UX Design</h4></a>
+                                <a href="#" className="d-block stretched-link"><h4 className="line-clamp-2 h-md-48 h-lg-58 me-md-6 me-lg-10 me-xl-4 mb-2">Modern Web Design: From Beginner to Advanced</h4></a>
 
                                 <div className="d-lg-flex align-items-end flex-wrap mb-n1">
                                   
@@ -254,205 +254,7 @@ const FeaturedTemplate = () => {
 
                                     <div className="col-auto px-2 text-right">
                                       
-                                        <ins className="h4 mb-0 d-block mb-lg-n1">pkr 129.99</ins>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-12 col-md-6 col-xl-4 pb-4 pb-md-7" style={{paddingRight:"15px",paddingLeft:"15px"}}>
-                    {/* <!-- Card --> */}
-                    <div className="card border rounded-xl shadow p-2 sk-fade">
-                        {/* <!-- Image --> */}
-                        <div className="card-zoom position-relative">
-                            <a href="#" className="card-img sk-thumbnail d-block">
-                                <img className="rounded shadow-light-lg" src="https://assets.justinmind.com/wp-content/uploads/2024/07/hero-image-examples-design-summit.png" alt="..."/>
-                            </a>
-                        </div>
-
-                        {/* <!-- Footer --> */}
-                        <div className="card-footer px-2 pb-2 mb-1 pt-4 position-relative">
-                            <a href="#" className="">
-                                <div className="avatar avatar-xl sk-fade-right badge-float position-absolute top-0 right-0 mt-n6 me-5 rounded-circle shadow border border-white border-w-lg">
-                                    <img src="src/assets/img/avatars/avatar-3.jpg" alt="..." className="avatar-img rounded-circle"/>
-                                </div>
-                            </a>
-
-                            {/* <!-- Preheading --> */}
-                            <a href="#"><span className="mb-1 d-inline-block text-gray-800">Photography</span></a>
-
-                            {/* <!-- Heading --> */}
-                            <div className="position-relative">
-                                <a href="#" className="d-block stretched-link"><h4 className="line-clamp-2 h-md-48 h-lg-58 me-md-6 me-lg-10 me-xl-4 mb-2">The Complete Financial Analyst Course 2020</h4></a>
-
-                                <div className="d-lg-flex align-items-end flex-wrap mb-n1">
-                                   
-
-                                
-                                </div>
-
-                                <div className="row mx-n2 align-items-end">
-                                    <div className="col px-2">
-                                        <ul className="nav mx-n3">
-                                            <li className="nav-item px-3">
-                                                <div className="d-flex align-items-center">
-                                                    <div className="me-2 d-flex icon-uxs text-secondary">
-                                                        {/* <!-- Icon --> */}
-                                                    
-
-                                                    </div>
-                                                 
-                                                </div>
-                                            </li>
-                                            <li className="nav-item px-3">
-                                                <div className="d-flex align-items-center">
-                                                    <div className="me-2 d-flex icon-uxs text-secondary">
-                                                        {/* <!-- Icon --> */}
-                                                     
-
-                                                    </div>
-                                               
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div className="col-auto px-2 text-right">
-                                      
-                                        <ins className="h4 mb-0 d-block mb-lg-n1">pkr 415.99</ins>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-12 col-md-6 col-xl-4 pb-4 pb-md-7" style={{paddingRight:"15px",paddingLeft:"15px"}}>
-                    {/* <!-- Card --> */}
-                    <div className="card border rounded-xl shadow p-2 sk-fade">
-                        {/* <!-- Image --> */}
-                        <div className="card-zoom position-relative">
-                            <a href="#" className="card-img sk-thumbnail d-block">
-                                <img className="rounded shadow-light-lg" src="src/assets/img/products/product-5.jpg" alt="..."/>
-                            </a>
-                        </div>
-
-                        {/* <!-- Footer --> */}
-                        <div className="card-footer px-2 pb-2 mb-1 pt-4 position-relative">
-                            <a href="#" className="">
-                                <div className="avatar avatar-xl sk-fade-right badge-float position-absolute top-0 right-0 mt-n6 me-5 rounded-circle shadow border border-white border-w-lg">
-                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLx6Y4_UqqCBKaoU4vo2IZ1mWv-6RtuQdLe6AN2-d2CUc02uNxYIsMqrDOoLkXdsk_pdw&usqp=CAU" alt="..." className="avatar-img rounded-circle"/>
-                                </div>
-                            </a>
-
-                            {/* <!-- Preheading --> */}
-                            <a href="#"><span className="mb-1 d-inline-block text-gray-800">Photography</span></a>
-
-
-                            {/* <!-- Heading --> */}
-                            <div className="position-relative">
-                                <a href="#" className="d-block stretched-link"><h4 className="line-clamp-2 h-md-48 h-lg-58 me-md-6 me-lg-10 me-xl-4 mb-2">Fashion TemplatesFrom Professional</h4></a>
-
-                                <div className="d-lg-flex align-items-end flex-wrap mb-n1">
-                              
-
-                                
-                                </div>
-
-                                <div className="row mx-n2 align-items-end">
-                                    <div className="col px-2">
-                                        <ul className="nav mx-n3">
-                                            <li className="nav-item px-3">
-                                                <div className="d-flex align-items-center">
-                                                    <div className="me-2 d-flex icon-uxs text-secondary">
-                                                        {/* <!-- Icon --> */}
-                                                    
-
-                                                    </div>
-                                                 
-                                                </div>
-                                            </li>
-                                            <li className="nav-item px-3">
-                                                <div className="d-flex align-items-center">
-                                                    <div className="me-2 d-flex icon-uxs text-secondary">
-                                                        {/* <!-- Icon --> */}
-                                                     
-
-                                                    </div>
-                                               
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div className="col-auto px-2 text-right">
-                                      
-                                        <ins className="h4 mb-0 d-block mb-lg-n1">pkr 415.99</ins>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-12 col-md-6 col-xl-4 pb-4 pb-md-7" style={{paddingRight:"15px",paddingLeft:"15px"}}>
-                    {/* <!-- Card --> */}
-                    <div className="card border rounded-xl shadow p-2 sk-fade">
-                        {/* <!-- Image --> */}
-                        <div className="card-zoom position-relative">
-                            <a href="#" className="card-img sk-thumbnail d-block">
-                                <img className="rounded shadow-light-lg" src="https://assets.justinmind.com/wp-content/uploads/2024/07/hero-image-examples-design-summit.png" alt="..."/>
-                            </a>
-                        </div>
-
-                        {/* <!-- Footer --> */}
-                        <div className="card-footer px-2 pb-2 mb-1 pt-4 position-relative">
-                            <a href="#" className="">
-                                <div className="avatar avatar-xl sk-fade-right badge-float position-absolute top-0 right-0 mt-n6 me-5 rounded-circle shadow border border-white border-w-lg">
-                                    <img src="src/assets/img/avatars/avatar-5.jpg" alt="..." className="avatar-img rounded-circle"/>
-                                </div>
-                            </a>
-
-                            {/* <!-- Preheading --> */}
-                            <a href="#"><span className="mb-1 d-inline-block text-gray-800">Photography</span></a>
-
-                            {/* <!-- Heading --> */}
-                            <div className="position-relative">
-                                <a href="#" className="d-block stretched-link"><h4 className="line-clamp-2 h-md-48 h-lg-58 me-md-6 me-lg-10 me-xl-4 mb-2">Learn Figma: User Interface Design Essentials - UI/UX Design</h4></a>
-
-                                <div className="d-lg-flex align-items-end flex-wrap mb-n1">
-
-                                
-                                </div>
-
-                                <div className="row mx-n2 align-items-end">
-                                    <div className="col px-2">
-                                        <ul className="nav mx-n3">
-                                            <li className="nav-item px-3">
-                                                <div className="d-flex align-items-center">
-                                                    <div className="me-2 d-flex icon-uxs text-secondary">
-                                                        {/* <!-- Icon --> */}
-                                                    
-
-                                                    </div>
-                                                 
-                                                </div>
-                                            </li>
-                                            <li className="nav-item px-3">
-                                                <div className="d-flex align-items-center">
-                                                    <div className="me-2 d-flex icon-uxs text-secondary">
-                                                        {/* <!-- Icon --> */}
-                                                     
-
-                                                    </div>
-                                               
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div className="col-auto px-2 text-right">
-                                      
-                                        <ins className="h4 mb-0 d-block mb-lg-n1">pkr 129.99</ins>
+                                        <ins className="h4 mb-0 d-block mb-lg-n1">pkr 89.99</ins>
                                     </div>
                                 </div>
                             </div>
@@ -461,7 +263,7 @@ const FeaturedTemplate = () => {
                 </div>
             </div>
         </div>
-        </section>
+    </section>
     </>
   )
 }

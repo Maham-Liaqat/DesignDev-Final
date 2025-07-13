@@ -524,34 +524,34 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
         <div className="position-absolute right-0 left-0 top-0 bottom-0">
           <div className="cs-parallax">
             <div className="cs-parallax-layer" data-depth="0.1">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-01.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-01.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.3">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-02.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-02.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.2">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-03.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-03.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.2">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-04.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-04.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.4">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-05.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-05.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.3">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-06.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-06.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.2">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-07.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-07.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.2">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-08.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-08.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.4">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-09.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-09.svg" alt="Layer" />
             </div>
             <div className="cs-parallax-layer" data-depth="0.3">
-              <img className="img-fluid" src="src/assets/img/parallax/layer-10.svg" alt="Layer" />
+              <img className="img-fluid" src="/assets/img/parallax/layer-10.svg" alt="Layer" />
             </div>
           </div>
         </div>
@@ -576,7 +576,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
           <div className="row align-items-center">
             <div className="col-12 col-md-5 col-lg-6 order-md-2" data-aos="fade-in">
               <img
-                src="src/assets/img/illustrations/illustration-4.png"
+                src="/assets/img/illustrations/illustration-4.png"
                 className="img-fluid ms-xl-5 mw-md-150 mw-lg-130 mb-6 mb-md-0"
                 alt="..."
               />
