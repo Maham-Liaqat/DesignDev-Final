@@ -35,24 +35,13 @@
   </head>
 
   <body>
-    <div id="root">
-      <!-- Example CountUp target -->
-      <h2 id="myCounter">0</h2>
-      <!-- Example Carousel -->
-      <div class="carousel">
-        <div class="carousel-cell"></div>
-        <div class="carousel-cell"></div>
-      </div>
-      <!-- Example Jarallax element -->
-      <div class="jarallax"></div>
-    </div>
+    <div id="root"></div>
 
+    <script type="module" src="/src/main.jsx"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- Libs JS -->
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -66,13 +55,12 @@
     <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
     <script src="https://unpkg.com/jarallax@2/dist/jarallax.min.js"></script>
     <script src="https://unpkg.com/jarallax@2/dist/jarallax-video.min.js"></script>
-    <script src="https://unpkg.com/jarallax@2/dist/jarallax-element.min.js"></script>
+    <!-- Removed deprecated jarallax-element.min.js -->
     <script src="https://cdn.jsdelivr.net/npm/parallax-js@3.1.0/dist/parallax.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0/dist/quill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.polyfills.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-
     <!-- Initialize Libraries -->
     <script>
       document.addEventListener('DOMContentLoaded', function () {
@@ -80,13 +68,11 @@
         if (typeof AOS !== 'undefined') {
           AOS.init();
         }
-
         // Initialize CountUp
         if (typeof CountUp !== 'undefined') {
           const countUp = new CountUp('myCounter', 2025);
           if (!countUp.error) countUp.start();
         }
-
         // Initialize Jarallax
         if (typeof jarallax !== 'undefined') {
           jarallax(document.querySelectorAll('.jarallax'), {
@@ -94,7 +80,6 @@
             disableVideo: /iPad|iPhone|iPod|Android/
           });
         }
-
         // Initialize Flickity
         if (typeof Flickity !== 'undefined') {
           const carousels = document.querySelectorAll('.carousel');
@@ -106,7 +91,6 @@
             });
           });
         }
-
         // Initialize Mapbox
         if (typeof mapboxgl !== 'undefined') {
           mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN'; // REPLACE THIS
@@ -114,8 +98,6 @@
         }
       });
     </script>
-
-  
     <script src="/assets/js/theme.min.js"></script>
   </body>
 </html>
