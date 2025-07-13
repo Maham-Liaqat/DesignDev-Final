@@ -1,0 +1,63 @@
+.pageWrapper {
+  min-height: 100vh;
+  background: #f6f9ff;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 0 0 0;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.leftColumn {
+  flex: 0 0 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px 0 rgba(80, 112, 255, 0.08);
+  padding: 32px 24px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #222b45;
+  text-align: center;
+}
+
+.emptyState {
+  color: #6c757d;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.rightColumn {
+  flex: 1 1 0;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px 0 rgba(80, 112, 255, 0.08);
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.centeredMessage {
+  color: #6c757d;
+  font-size: 1.2rem;
+  text-align: center;
+} 
