@@ -85,12 +85,12 @@ app.post('/profile', async (req, res) => {
       payment_method_types: ['card'],
       line_items: [{
         price_data: {
-          currency: 'usd',
+          currency: 'pkr', // Changed from 'usd' to 'pkr'
           product_data: {
             name: `Template from ${sellerName}`,
             description: 'Digital template download',
           },
-          unit_amount: amountInCents,
+          unit_amount: amountInCents, // price in paisa
         },
         quantity: 1,
       }],
