@@ -59,7 +59,7 @@ const TemplateList = ({ searchTerm, setSearchTerm }) => {
   // Pass templates and navigate to Input
   return (
     <div>
-      <Input searchTerm={searchTerm} setSearchTerm={setSearchTerm} templates={templates} navigate={navigate} />
+      {/* Removed <Input ... /> from here so search bar only appears in Navbar */}
       <section className="pt-5 pb-9 py-md-11 bg-white"> 
         <div className="container">
           <div className="text-center mb-5 mb-md-8" data-aos="fade-up" data-aos-duration="800">
