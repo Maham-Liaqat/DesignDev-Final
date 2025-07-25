@@ -569,7 +569,7 @@ const Template = () => {
               <div className="about-seller-section">
                 <Link to={sellerId ? `/profile/${sellerId}` : '#'}>
                   <img
-                    src={`http://localhost:8080/${template.ProfileImage}`}
+                    src={`https://designdev-final.onrender.com/${template.ProfileImage}`}
                     alt={template.sellerName}
                     className="rounded-circle mx-4"
                     width="100"
