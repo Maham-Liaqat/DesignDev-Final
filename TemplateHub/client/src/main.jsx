@@ -13,7 +13,6 @@ import ReviewPage from './Components/ReviewPage.jsx'
 import UserProfile from './Components/UserProfile.jsx'
 import EditProfile from './Components/EditProfile.jsx'
 import Inbox from './Components/Inbox.jsx'
-import Chat from './Components/Chat.jsx'
 import { ChatProvider } from './contexts/ChatContext.jsx'
 
 createRoot(document.getElementById('root')).render(
@@ -36,7 +35,6 @@ createRoot(document.getElementById('root')).render(
             <Route path='/profile/:userId' element={<UserProfile />} />
             <Route path='/profile/edit' element={<EditProfile />} />
             <Route path='/inbox' element={<Inbox />} />
-            <Route path='/chat/:conversationId' element={<Chat />} />
         </Route>
       </Routes>
     </BrowserRouter>

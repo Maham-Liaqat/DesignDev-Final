@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { FaGithub, FaLinkedin, FaTwitter, FaMapMarkerAlt, FaEdit, FaStar, FaFileAlt, FaChartLine, FaClock, FaTrash } from 'react-icons/fa';
 import API_CONFIG from '../config/api';
 
@@ -90,7 +91,26 @@ const UserProfile = () => {
           <button
             className="btn btn-primary position-absolute"
             style={{ top: 24, right: 24, borderRadius: 20, fontWeight: 500 }}
-            onClick={() => navigate(`/chat/${userId}`)}
+            onClick={async () => {
+              try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                  toast.error("Please login to message this user.");
+                  return;
+                }
+                // Create or get conversation
+                const convRes = await axios.post(
+                  `${API_CONFIG.BASE_URL}/api/chat/conversations`,
+                  { recipientId: userId },
+                  { headers: { Authorization: `Bearer ${token}` } }
+                );
+                navigate(`/inbox`, { 
+                  state: { selectedConversationId: convRes.data.conversation._id } 
+                });
+              } catch (err) {
+                toast.error("Could not start chat with this user.");
+              }
+            }}
           >
             Message Me
           </button>

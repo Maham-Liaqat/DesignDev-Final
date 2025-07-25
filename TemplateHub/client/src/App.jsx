@@ -9,6 +9,7 @@ import FeaturedTemplate from './Components/FeaturedTemplate'
 import Pricingtable from './Components/Pricingtable'
 import Template from './Components/Template'
 import ResetPassword from './Components/ResetPassword';
+import Inbox from './Components/Inbox';
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
           </>
         } />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/inbox" element={<Inbox />} />
       </Routes>
     </BrowserRouter>
   )

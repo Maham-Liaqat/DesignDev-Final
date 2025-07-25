@@ -6,10 +6,9 @@ import { Outlet, useLocation } from "react-router-dom"
 const Layout = () => {
   const location = useLocation();
 
-  // Hide footer on seller and chat routes
+  // Hide footer on seller routes
   const hideFooterRoutes = ["/seller"];
-  const isChatPage = location.pathname.startsWith('/chat/');
-  const hideFooter = hideFooterRoutes.includes(location.pathname) || isChatPage;
+  const hideFooter = hideFooterRoutes.includes(location.pathname);
 
   return (
     <div>

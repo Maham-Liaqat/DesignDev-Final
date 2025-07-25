@@ -147,7 +147,9 @@ const Template = () => {
         { recipientId: sellerId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      navigate(`/chat/${convRes.data.conversation._id}`);
+      navigate(`/inbox`, { 
+        state: { selectedConversationId: convRes.data.conversation._id } 
+      });
     } catch (err) {
       toast.error("Could not start chat with seller.");
     }
