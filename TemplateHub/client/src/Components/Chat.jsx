@@ -615,63 +615,60 @@ const Chat = () => {
                     </div>
                   ) : (
                     <>
-                      {isFile ? (
-                        <a href={fileUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            padding: '12px 16px',
-                            background: 'rgba(255,255,255,0.1)',
-                            borderRadius: '12px',
-                            marginTop: '8px'
-                          }}>
-                            {getFileIcon(msg.fileType, fileUrl)}
-                            <span style={{ flex: 1, wordBreak: 'break-all' }}>
-                              {msg.originalName || fileUrl.split('/').pop()}
-                            </span>
-                            <FaDownload style={{ color: isMine ? '#fff' : '#6366f1' }} />
+                      <div className="message-content">
+                        {isFile ? (
+                          <a href={fileUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '12px',
+                              padding: '12px 16px',
+                              background: 'rgba(255,255,255,0.1)',
+                              borderRadius: '12px',
+                              marginTop: '8px'
+                            }}>
+                              {getFileIcon(msg.fileType, fileUrl)}
+                              <span style={{ flex: 1, wordBreak: 'break-all' }}>
+                                {msg.originalName || fileUrl.split('/').pop()}
+                              </span>
+                              <FaDownload style={{ color: isMine ? '#fff' : '#6366f1' }} />
+                            </div>
+                          </a>
+                        ) : (
+                          <div style={{ wordBreak: 'break-word' }}>
+                            {msg.content}
                           </div>
-                        </a>
-                      ) : (
-                        <div style={{ wordBreak: 'break-word' }}>
-                          {msg.content}
-                        </div>
-                      )}
+                        )}
+                      </div>
                       
-                      {/* Message Status Indicators */}
-                      {isMine && (
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          marginTop: '4px',
-                          fontSize: '12px',
-                          opacity: 0.7
-                        }}>
-                          {messageStatus[msg._id] === 'sent' && (
-                            <span style={{ color: '#4caf50' }}>✓</span>
-                          )}
-                          {messageStatus[msg._id] === 'delivered' && (
-                            <span style={{ color: '#ff9800' }}>✓✓</span>
-                          )}
-                          {messageStatus[msg._id] === 'read' && (
-                            <span style={{ color: '#2196f3' }}>✓✓✓</span>
-                          )}
-                        </div>
-                      )}
+                      <div className="message-timestamp">
+                        <span>
+                          {msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString([], { 
+                            hour: '2-digit', 
+                            minute: '2-digit',
+                            hour12: true 
+                          }) : ""}
+                        </span>
+                        {isMine && (
+                          <div className="message-status">
+                            {messageStatus[msg._id] === 'sent' && (
+                              <span style={{ color: '#4caf50' }}>✓</span>
+                            )}
+                            {messageStatus[msg._id] === 'delivered' && (
+                              <span style={{ color: '#ff9800' }}>✓✓</span>
+                            )}
+                            {messageStatus[msg._id] === 'read' && (
+                              <span style={{ color: '#2196f3' }}>✓✓✓</span>
+                            )}
+                          </div>
+                        )}
+                        {msg.edited && (
+                          <span className="message-edited">(edited)</span>
+                        )}
+                      </div>
                     </>
                   )}
                 </MessageBubble>
-                
-                <MessageTime isMe={isMine}>
-                  {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ""}
-                  {msg.edited && (
-                    <span style={{ marginLeft: '6px', color: '#94a3b8', fontStyle: 'italic' }}>
-                      (edited)
-                    </span>
-                  )}
-                </MessageTime>
                 
                 {/* Message Actions */}
                 <div style={{
