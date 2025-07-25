@@ -87,7 +87,7 @@ const TemplateList = ({ searchTerm, setSearchTerm }) => {
                     >
                       <img
                         className="rounded shadow-light-lg img-fluid"
-                        src={`http://localhost:8080/${template.demoImages[0]}`}
+                        src={`https://designdev-final.onrender.com/${template.demoImages[0]}`}
                         alt={template.templateName}
                       />
                     </Link>
@@ -96,7 +96,7 @@ const TemplateList = ({ searchTerm, setSearchTerm }) => {
                   <div className="card-footer px-2 pb-2 mb-1 pt-4 position-relative">
                     <div className="avatar avatar-xl sk-fade-right badge-float position-absolute top-0 end-0 mt-n6 me-5 rounded-circle shadow border border-white border-w-lg">
                       <img
-                        src={`http://localhost:8080/${template.ProfileImage}`}
+                        src={`https://designdev-final.onrender.com/${template.ProfileImage}`}
                         alt="Avatar"
                         className="avatar-img rounded-circle"
                       />
