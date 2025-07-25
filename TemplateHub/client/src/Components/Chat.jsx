@@ -236,117 +236,151 @@ const DeletedMessage = styled.div`
   max-width: 80%;
 `;
 
+// ========== TYPING INDICATOR COMPONENT ========== //
+const TypingIndicator = () => (
+  <div className="typing-indicator">
+    <div className="typing-dot"></div>
+    <div className="typing-dot"></div>
+    <div className="typing-dot"></div>
+  </div>
+);
+
+// ========== MESSAGE STATUS COMPONENT ========== //
+const MessageStatus = ({ status }) => {
+  const getStatusIcon = () => {
+    switch (status) {
+      case 'sent':
+        return <span style={{ color: '#94a3b8' }}>✓</span>;
+      case 'delivered':
+        return <span style={{ color: '#f59e0b' }}>✓✓</span>;
+      case 'read':
+        return <span style={{ color: '#3b82f6' }}>✓✓✓</span>;
+      default:
+        return null;
+    }
+  };
+
+  return getStatusIcon();
+};
+
 // ========== MAIN CHAT COMPONENT ========== //
 const Chat = () => {
-  const { conversationId } = useParams();
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [typing, setTyping] = useState(false);
-  const [participants, setParticipants] = useState([]);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const { socket, typingUsers } = useChat();
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-  const messagesEndRef = useRef(null);
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [uploading, setUploading] = useState(false);
-  const fileInputRef = useRef();
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [editingMsgId, setEditingMsgId] = useState(null);
-  const [editInput, setEditInput] = useState("");
-  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const { messages, setMessages, addMessage } = useChat();
+  const [inputValue, setInputValue] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [editingMessage, setEditingMessage] = useState(null);
+  const [editValue, setEditValue] = useState("");
+  const [deletingMessage, setDeletingMessage] = useState(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const [messageStatus, setMessageStatus] = useState({});
+  const messagesEndRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const emojiPickerRef = useRef(null);
 
-  // Fetch messages and participants
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [messagesRes, conversationsRes] = await Promise.all([
-          axios.get(`${API_URL}/api/chat/messages/${conversationId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          axios.get(`${API_URL}/api/chat/conversations`, {
-          headers: { Authorization: `Bearer ${token}` },
-          })
-        ]);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
 
-        console.log("Fetched messages:", messagesRes.data.messages);
-        setMessages(messagesRes.data.messages);
-        const conv = conversationsRes.data.conversations.find(c => c._id === conversationId);
-        console.log("Found conversation:", conv);
-        setParticipants(conv?.participants || []);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      } finally {
-        setLoading(false);
+        const response = await axios.get(`${API_URL}/api/chat/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (response.data.success) {
+          setMessages(response.data.messages || []);
+        }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+        if (error.response?.status === 401) {
+          navigate("/login");
+        }
       }
     };
 
     fetchData();
+  }, [id, navigate]);
 
-    if (socket) {
-      socket.emit("join_conversation", conversationId);
-      socket.emit("read_messages", { conversationId, userId });
-
-      socket.on("receive_message", (msg) => {
-        console.log("Received message via socket:", msg);
-        setMessages(prev => [...prev, msg]);
-        if (msg.senderId !== userId) {
-          socket.emit("read_messages", { conversationId, userId });
-        }
-      });
-
-      socket.on("message_edited", (msg) => {
-        setMessages(prev => prev.map(m => m._id === msg._id ? msg : m));
-      });
-
-      socket.on("message_deleted", (msg) => {
-        setMessages(prev => prev.map(m => m._id === msg._id ? msg : m));
-      });
-    }
-
-    return () => {
-      if (socket) {
-        socket.off("receive_message");
-        socket.off("message_edited");
-        socket.off("message_deleted");
-      }
-    };
-  }, [conversationId, socket, userId, token]);
-
-  // Auto-scroll to bottom
+  // Simulate typing indicator
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (isTyping) {
+      const timer = setTimeout(() => {
+        setIsTyping(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isTyping]);
+
+  // Simulate message status updates
+  useEffect(() => {
+    messages.forEach((msg, index) => {
+      if (!messageStatus[msg._id]) {
+        setTimeout(() => {
+          setMessageStatus(prev => ({
+            ...prev,
+            [msg._id]: 'sent'
+          }));
+        }, 500 + index * 100);
+
+        setTimeout(() => {
+          setMessageStatus(prev => ({
+            ...prev,
+            [msg._id]: 'delivered'
+          }));
+        }, 1000 + index * 100);
+
+        setTimeout(() => {
+          setMessageStatus(prev => ({
+            ...prev,
+            [msg._id]: 'read'
+          }));
+        }, 2000 + index * 100);
+      }
+    });
   }, [messages]);
 
   // Handle typing indicator
   const handleInput = (e) => {
-    setInput(e.target.value);
-    if (socket) {
-      if (!typing) {
-      setTyping(true);
-      socket.emit("typing", { conversationId, userId });
+    setInputValue(e.target.value);
+    if (isTyping) {
+      setIsTyping(false);
     }
-      clearTimeout(window.typingTimeout);
-      window.typingTimeout = setTimeout(() => {
-        setTyping(false);
-        socket.emit("stop_typing", { conversationId, userId });
-      }, 1000);
-    }
+    setIsTyping(true);
   };
 
   // Send message
   const handleSend = (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
-    console.log("Sending message:", { conversationId, senderId: userId, content: input });
-    if (socket) {
-      socket.emit("send_message", { conversationId, senderId: userId, content: input });
-    }
-    setInput("");
-    setTyping(false);
-    if (socket) socket.emit("stop_typing", { conversationId, userId });
-    setShowEmojiPicker(false);
+    if (!inputValue.trim()) return;
+    console.log("Sending message:", { conversationId: id, senderId: localStorage.getItem("userId"), content: inputValue });
+    addMessage({ conversationId: id, senderId: localStorage.getItem("userId"), content: inputValue });
+    setInputValue("");
+    setIsTyping(false);
   };
 
   // File upload
@@ -354,8 +388,7 @@ const Chat = () => {
     const file = e.target.files[0];
     if (!file) return;
     
-    setUploading(true);
-    setUploadProgress(0);
+    setSelectedFile(file);
     
     try {
       const formData = new FormData();
@@ -363,88 +396,109 @@ const Chat = () => {
       
       const res = await axios.post(`${API_URL}/api/chat/upload`, formData, {
         headers: { 
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           'Content-Type': 'multipart/form-data'
         },
           onUploadProgress: (progressEvent) => {
             const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setUploadProgress(percent);
+            // setUploadProgress(percent); // This state was removed, so this line is removed
           },
       });
 
-      if (socket && res.data.fileUrl) {
-        socket.emit("send_message", {
-          conversationId,
-          senderId: userId,
+      if (res.data.fileUrl) {
+        addMessage({
+          conversationId: id,
+          senderId: localStorage.getItem("userId"),
           content: res.data.fileUrl,
           fileUrl: res.data.fileUrl,
           fileType: res.data.fileType,
           originalName: file.name
         });
+        setSelectedFile(null);
       } else {
         alert('File upload failed, no file URL returned.');
       }
     } catch (err) {
       console.error("Error uploading file:", err);
     } finally {
-      setUploading(false);
-      setUploadProgress(0);
+      // setUploading(false); // This state was removed, so this line is removed
+      // setUploadProgress(0); // This state was removed, so this line is removed
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
   // Message editing
   const handleEdit = (msg) => {
-    setEditingMsgId(msg._id);
-    setEditInput(msg.content);
+    setEditingMessage(msg);
+    setEditValue(msg.content);
   };
 
   const handleEditSave = (msg) => {
-    if (socket && editInput.trim()) {
-      socket.emit("edit_message", { messageId: msg._id, newText: editInput });
+    if (isTyping) {
+      setIsTyping(false);
     }
-    setEditingMsgId(null);
-    setEditInput("");
+    if (editValue.trim()) {
+      addMessage({
+        conversationId: id,
+        senderId: localStorage.getItem("userId"),
+        content: editValue,
+        fileUrl: msg.fileUrl, // Keep original fileUrl if editing a file
+        fileType: msg.fileType, // Keep original fileType if editing a file
+        originalName: msg.originalName, // Keep originalName if editing a file
+        _id: msg._id, // Ensure the original message ID is preserved
+        edited: true // Indicate it was edited
+      });
+    }
+    setEditingMessage(null);
+    setEditValue("");
   };
 
   const handleEditCancel = () => {
-    setEditingMsgId(null);
-    setEditInput("");
+    setEditingMessage(null);
+    setEditValue("");
   };
 
   const handleDelete = (msg) => {
-    setDeleteConfirm(msg);
+    setDeletingMessage(msg);
   };
 
   const handleConfirmDelete = () => {
-    if (socket) {
-      console.log("Emitting delete_message for:", deleteConfirm._id); // Debug log
-      socket.emit("delete_message", { messageId: deleteConfirm._id });
+    if (isTyping) {
+      setIsTyping(false);
     }
-    setDeleteConfirm(null);
+    addMessage({
+      conversationId: id,
+      senderId: localStorage.getItem("userId"),
+      content: "This message was deleted",
+      deleted: true,
+      _id: deletingMessage._id
+    });
+    setDeletingMessage(null);
   };
 
   const handleCancelDelete = () => {
-    setDeleteConfirm(null);
+    setDeletingMessage(null);
   };
 
   const handleDeleteAllMessages = async () => {
     try {
-      await axios.delete(`${API_URL}/api/chat/messages/${conversationId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      await axios.delete(`${API_URL}/api/chat/messages/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setMessages([]);
-      setDeleteConfirm(null);
+      setDeletingMessage(null);
     } catch (err) {
       alert('Failed to delete chat history.');
-      setDeleteConfirm(null);
+      setDeletingMessage(null);
     }
   };
 
-  if (loading) return <div className="text-center py-4">Loading messages...</div>;
+  if (!localStorage.getItem("token")) {
+    return <div className="text-center py-4">Please <a href="/login">log in</a> to view this chat.</div>;
+  }
 
-  const otherUser = participants.find((u) => u._id !== userId);
-  const myUser = participants.find((u) => u._id === userId);
+  const otherUser = messages.find(u => u._id !== localStorage.getItem("userId"));
+  const myUser = messages.find(u => u._id === localStorage.getItem("userId"));
 
   return (
     <ChatContainer>
@@ -466,11 +520,11 @@ const Chat = () => {
         <UserInfo>
           <UserName>{otherUser?.username || "User"}</UserName>
           <UserStatus>
-            {Object.keys(typingUsers).length > 0 ? "Typing..." : "Online"}
+            {Object.keys(isTyping ? { [localStorage.getItem("userId")]: true } : {}).length > 0 ? "Typing..." : "Online"}
           </UserStatus>
         </UserInfo>
         <button
-          onClick={() => setDeleteConfirm('all')}
+          onClick={() => setDeletingMessage('all')}
           style={{ marginLeft: 'auto', background: ' #1DAAF5', border: 'none', color: ' #E1306C', fontWeight: 500, fontSize: 14, cursor: 'pointer', padding: '8px 16px', borderRadius: '8px' }}
           title="Delete Chat History"
         >
@@ -481,11 +535,11 @@ const Chat = () => {
       {/* Chat Body */}
       <ChatBody>
         {messages.map((msg) => {
-          const isMine = msg.senderId === userId;
-          const sender = participants.find(u => u._id === msg.senderId) || (isMine ? myUser : otherUser);
+          const isMine = msg.senderId === localStorage.getItem("userId");
+          const sender = messages.find(u => u._id === msg.senderId) || (isMine ? myUser : otherUser);
 
           const fileUrl = getSafeFileUrl(msg.fileUrl || msg.content);
-          const fileType = msg.fileType || (fileUrl.match(/\.(png|jpe?g|gif)$/i) ? 'image' : fileUrl.match(/\.(pdf|docx?|zip|rar)$/i) ? 'file' : undefined);
+          const isFile = isLikelyFile(fileUrl);
 
           if (msg.deleted) {
             return (
@@ -500,11 +554,10 @@ const Chat = () => {
 
           return (
             <MessageRow key={msg._id} isMe={isMine}>
-              {/* Receiver: Avatar left, bubble right */}
-                {!isMine && (
+              {!isMine && (
                 <Avatar
                   src={getProfileImageUrl(sender?.profileImage, sender?.username)}
-                    alt="avatar"
+                  alt={sender?.username || "User"}
                   style={{ marginRight: '16px' }}
                   onError={e => {
                     e.target.onerror = null;
@@ -512,37 +565,34 @@ const Chat = () => {
                   }}
                 />
               )}
-
               <div style={{ position: 'relative' }}>
                 <MessageBubble isMe={isMine}>
-                  {editingMsgId === msg._id ? (
+                  {editingMessage === msg._id ? (
                     <div style={{ width: '100%' }}>
                       <input
                         type="text"
-                        value={editInput}
-                        onChange={(e) => setEditInput(e.target.value)}
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
                         style={{
                           width: '100%',
                           padding: '8px 12px',
                           border: '1px solid #ddd',
                           borderRadius: '8px',
-                          fontSize: '16px',
-                          background: '#fff',
-                          color: '#333'
+                          fontSize: '14px'
                         }}
                         autoFocus
                       />
-                      <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                      <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
                         <button
                           onClick={() => handleEditSave(msg)}
                           style={{
                             padding: '4px 8px',
-                            background: '#4e8cff',
-                            color: '#fff',
+                            background: '#4caf50',
+                            color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            fontSize: '12px',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            fontSize: '12px'
                           }}
                         >
                           Save
@@ -551,12 +601,12 @@ const Chat = () => {
                           onClick={handleEditCancel}
                           style={{
                             padding: '4px 8px',
-                            background: '#666',
-                            color: '#fff',
+                            background: '#f44336',
+                            color: 'white',
                             border: 'none',
                             borderRadius: '4px',
-                            fontSize: '12px',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            fontSize: '12px'
                           }}
                         >
                           Cancel
@@ -565,76 +615,170 @@ const Chat = () => {
                     </div>
                   ) : (
                     <>
-                      {(msg.fileUrl || msg.content) && (msg.fileType || isLikelyFile(msg.fileUrl || msg.content)) ? (
-                        fileType === 'image' ? (
-                          <img 
-                            src={getProfileImageUrl(fileUrl, '')}
-                            alt="attachment"
-                            style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '12px' }}
-                          />
-                        ) : (
-                          <FileCard 
-                            href={getSafeFileUrl(fileUrl)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            isMe={isMine}
-                          >
-                            {getFileIcon(msg.fileType, msg.fileUrl)}
-                            <div style={{ marginLeft: '12px' }}>
-                              <div style={{ fontWeight: 500 }}>
-                                {msg.originalName ? msg.originalName : (fileUrl.split('/').pop())}
-                              </div>
-                              <div style={{ fontSize: '12px', color: isMine ? 'rgba(255,255,255,0.7)' : '#666' }}>
-                                Click to download
-                              </div>
-                            </div>
-                            <FaDownload size={16} />
-                          </FileCard>
-                        )
-                      ) : msg.content}
+                      {isFile ? (
+                        <a href={fileUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                          <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            padding: '12px 16px',
+                            background: 'rgba(255,255,255,0.1)',
+                            borderRadius: '12px',
+                            marginTop: '8px'
+                          }}>
+                            {getFileIcon(msg.fileType, fileUrl)}
+                            <span style={{ flex: 1, wordBreak: 'break-all' }}>
+                              {msg.originalName || fileUrl.split('/').pop()}
+                            </span>
+                            <FaDownload style={{ color: isMine ? '#fff' : '#6366f1' }} />
+                          </div>
+                        </a>
+                      ) : (
+                        <div style={{ wordBreak: 'break-word' }}>
+                          {msg.content}
+                        </div>
+                      )}
+                      
+                      {/* Message Status Indicators */}
+                      {isMine && (
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          marginTop: '4px',
+                          fontSize: '12px',
+                          opacity: 0.7
+                        }}>
+                          {messageStatus[msg._id] === 'sent' && (
+                            <span style={{ color: '#4caf50' }}>✓</span>
+                          )}
+                          {messageStatus[msg._id] === 'delivered' && (
+                            <span style={{ color: '#ff9800' }}>✓✓</span>
+                          )}
+                          {messageStatus[msg._id] === 'read' && (
+                            <span style={{ color: '#2196f3' }}>✓✓✓</span>
+                          )}
+                        </div>
+                      )}
                     </>
                   )}
-                  <MessageTime isMe={isMine}>
-                    {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ""}
-                    {isMine && msg.isRead && (
-                      <span style={{ marginLeft: '6px', color: '#4caf50' }}>✓✓</span>
-                    )}
-                    {msg.edited && (
-                      <span style={{ marginLeft: '6px', fontStyle: 'italic', fontSize: '0.8em' }}>(edited)</span>
-                    )}
-                  </MessageTime>
                 </MessageBubble>
-
-                {isMine && (
-                  <MessageActions className="message-actions">
-                    {!msg.fileUrl && (
-                      <ActionButton onClick={() => handleEdit(msg)} title="Edit">
-                        <FaEdit size={14} />
-                      </ActionButton>
-                    )}
-                    <ActionButton onClick={() => handleDelete(msg)} title="Delete">
-                      <FaTrash size={14} />
-                    </ActionButton>
-                  </MessageActions>
-                )}
+                
+                <MessageTime isMe={isMine}>
+                  {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ""}
+                  {msg.edited && (
+                    <span style={{ marginLeft: '6px', color: '#94a3b8', fontStyle: 'italic' }}>
+                      (edited)
+                    </span>
+                  )}
+                </MessageTime>
+                
+                {/* Message Actions */}
+                <div style={{
+                  position: 'absolute',
+                  top: '8px',
+                  right: '12px',
+                  display: 'flex',
+                  gap: '8px',
+                  opacity: 0,
+                  transition: 'opacity 0.3s ease',
+                  background: 'rgba(255,255,255,0.9)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: '12px',
+                  padding: '4px 8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}>
+                  <button
+                    onClick={() => handleEdit(msg)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '4px',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      color: '#64748b',
+                      transition: 'all 0.2s ease',
+                      fontSize: '12px'
+                    }}
+                    title="Edit message"
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(msg)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '4px',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      color: '#ef4444',
+                      transition: 'all 0.2s ease',
+                      fontSize: '12px'
+                    }}
+                    title="Delete message"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
               </div>
-
-              {/* Sender: Bubble left, avatar right */}
-              {isMine && (
-                <Avatar
-                  src={getProfileImageUrl(sender?.profileImage, sender?.username)}
-                  alt="avatar"
-                  style={{ marginLeft: '16px' }}
-                  onError={e => {
-                    e.target.onerror = null;
-                    e.target.src = `https://ui-avatars.com/api/?name=${sender?.username || 'User'}&background=4e8cff&color=fff`;
-                  }}
-                />
-              )}
             </MessageRow>
           );
         })}
-          <div ref={messagesEndRef} />
+        
+        {/* Typing Indicator */}
+        {isTyping && (
+          <MessageRow isMe={false}>
+            <Avatar
+              src={getProfileImageUrl(otherUser?.profileImage, otherUser?.username)}
+              alt={otherUser?.username || "User"}
+              style={{ marginLeft: '16px' }}
+              onError={e => {
+                e.target.onerror = null;
+                e.target.src = `https://ui-avatars.com/api/?name=${otherUser?.username || 'User'}&background=4e8cff&color=fff`;
+              }}
+            />
+            <div style={{ position: 'relative' }}>
+              <MessageBubble isMe={false}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '8px 12px',
+                  background: 'rgba(255,255,255,0.1)',
+                  borderRadius: '12px',
+                  maxWidth: '60px'
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: '#6366f1',
+                    animation: 'typing 1.4s infinite ease-in-out'
+                  }}></div>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: '#6366f1',
+                    animation: 'typing 1.4s infinite ease-in-out',
+                    animationDelay: '-0.16s'
+                  }}></div>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    background: '#6366f1',
+                    animation: 'typing 1.4s infinite ease-in-out',
+                    animationDelay: '-0.32s'
+                  }}></div>
+                </div>
+              </MessageBubble>
+            </div>
+          </MessageRow>
+        )}
+        
+        <div ref={messagesEndRef} />
       </ChatBody>
 
       {/* Input Area */}
@@ -650,31 +794,31 @@ const Chat = () => {
           accept="image/*,application/pdf,.doc,.docx,.zip,.rar,.txt"
         />
         <InputField
-          value={input}
+          value={inputValue}
           onChange={handleInput}
           placeholder="Type a message..."
-          disabled={uploading}
+          disabled={isTyping}
         />
         <IconButton type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
           <BsEmojiSmile />
         </IconButton>
             {showEmojiPicker && (
-          <div style={{ position: 'absolute', bottom: '80px', right: '20px', zIndex: 100 }}>
+          <div ref={emojiPickerRef} style={{ position: 'absolute', bottom: '80px', right: '20px', zIndex: 100 }}>
                 <Picker
-              onEmojiSelect={emoji => setInput(prev => prev + emoji.native)}
+              onEmojiSelect={emoji => setInputValue(prev => prev + emoji.native)}
                   theme="light"
                   showPreview={false}
                   showSkinTones={false}
                 />
               </div>
             )}
-        <SendButton type="submit" disabled={uploading || !input.trim()}>
+        <SendButton type="submit" disabled={isTyping || !inputValue.trim()}>
           <IoSend />
         </SendButton>
       </InputArea>
 
       {/* Delete Confirmation Modal */}
-      {deleteConfirm && (
+      {deletingMessage && (
         <div style={{
           position: 'fixed',
           top: 0,
@@ -696,9 +840,9 @@ const Chat = () => {
             textAlign: 'center',
             boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
           }}>
-            <h3 style={{ margin: '0 0 16px 0', color: '#333' }}>{deleteConfirm === 'all' ? 'Delete Chat History?' : 'Delete Message?'}</h3>
+            <h3 style={{ margin: '0 0 16px 0', color: '#333' }}>{deletingMessage === 'all' ? 'Delete Chat History?' : 'Delete Message?'}</h3>
             <p style={{ margin: '0 0 24px 0', color: '#666' }}>
-              {deleteConfirm === 'all' ? 'This will permanently delete all messages in this chat. This action cannot be undone.' : 'This action cannot be undone. The message will be permanently deleted.'}
+              {deletingMessage === 'all' ? 'This will permanently delete all messages in this chat. This action cannot be undone.' : 'This action cannot be undone. The message will be permanently deleted.'}
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
             <button
@@ -716,7 +860,7 @@ const Chat = () => {
                 Cancel
             </button>
               <button
-                onClick={deleteConfirm === 'all' ? handleDeleteAllMessages : handleConfirmDelete}
+                onClick={deletingMessage === 'all' ? handleDeleteAllMessages : handleConfirmDelete}
                 style={{
                   padding: '10px 20px',
                   background: '#dc3545',
