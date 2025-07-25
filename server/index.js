@@ -34,6 +34,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Ensure uploads directory exists
+const fs = require('fs');
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads');
+}
+
 const PORT = process.env.PORT || 8080;
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
