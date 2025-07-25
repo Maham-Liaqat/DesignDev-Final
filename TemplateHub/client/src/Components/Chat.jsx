@@ -13,15 +13,28 @@ import API_CONFIG from '../config/api';
 
 const API_URL = API_CONFIG.BASE_URL;
 
-const getProfileImageUrl = (path, username) => {
+const getProfileImageUrl = (path, username, isCurrentUser = false) => {
   if (!path) {
-    // No image path, fallback to avatar
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(username || 'User')}&background=4e8cff&color=fff`;
+    // No image path, fallback to avatar with proper user identification
+    const displayName = isCurrentUser ? 'You' : (username || 'User');
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=8b5cf6&color=fff`;
   }
   if (/^https?:\/\//.test(path)) return path;
   // Remove ALL leading 'uploads/' or backslash from path to avoid any double prefix
   const cleanPath = path.replace(/^(uploads[\\/]+)+/, '');
   return `${API_URL}/uploads/${cleanPath}`;
+};
+
+const getAvatarDisplayName = (username, isCurrentUser = false) => {
+  if (isCurrentUser) return 'You';
+  if (!username) return 'User';
+  
+  // Extract initials from username
+  const names = username.split(' ');
+  if (names.length >= 2) {
+    return names[0][0] + names[1][0];
+  }
+  return username.substring(0, 2).toUpperCase();
 };
 
 const getFileIcon = (fileType, fileUrl) => {
@@ -510,7 +523,7 @@ const Chat = () => {
           </svg>
         </button>
         <Avatar
-          src={getProfileImageUrl(otherUser?.profileImage, otherUser?.username)}
+          src={getProfileImageUrl(otherUser?.profileImage, otherUser?.username, false)}
           alt="avatar"
           onError={(e) => {
             e.target.onerror = null;
@@ -534,9 +547,10 @@ const Chat = () => {
 
       {/* Chat Body */}
       <ChatBody>
-        {messages.map((msg) => {
-          const isMine = msg.senderId === localStorage.getItem("userId");
-          const sender = messages.find(u => u._id === msg.senderId) || (isMine ? myUser : otherUser);
+                  {messages.map((msg) => {
+            const isMine = msg.senderId === localStorage.getItem("userId");
+            const currentUserId = localStorage.getItem("userId");
+            const sender = isMine ? { username: 'You', profileImage: null } : otherUser;
 
           const fileUrl = getSafeFileUrl(msg.fileUrl || msg.content);
           const isFile = isLikelyFile(fileUrl);
@@ -556,12 +570,23 @@ const Chat = () => {
             <MessageRow key={msg._id} isMe={isMine}>
               {!isMine && (
                 <Avatar
-                  src={getProfileImageUrl(sender?.profileImage, sender?.username)}
+                  src={getProfileImageUrl(sender?.profileImage, sender?.username, false)}
                   alt={sender?.username || "User"}
                   style={{ marginRight: '16px' }}
                   onError={e => {
                     e.target.onerror = null;
-                    e.target.src = `https://ui-avatars.com/api/?name=${sender?.username || 'User'}&background=4e8cff&color=fff`;
+                    e.target.src = `https://ui-avatars.com/api/?name=${sender?.username || 'User'}&background=8b5cf6&color=fff`;
+                  }}
+                />
+              )}
+              {isMine && (
+                <Avatar
+                  src={getProfileImageUrl(null, 'You', true)}
+                  alt="You"
+                  style={{ marginLeft: '16px' }}
+                  onError={e => {
+                    e.target.onerror = null;
+                    e.target.src = `https://ui-avatars.com/api/?name=You&background=8b5cf6&color=fff`;
                   }}
                 />
               )}
@@ -727,12 +752,12 @@ const Chat = () => {
         {isTyping && (
           <MessageRow isMe={false}>
             <Avatar
-              src={getProfileImageUrl(otherUser?.profileImage, otherUser?.username)}
+              src={getProfileImageUrl(otherUser?.profileImage, otherUser?.username, false)}
               alt={otherUser?.username || "User"}
-              style={{ marginLeft: '16px' }}
+              style={{ marginRight: '16px' }}
               onError={e => {
                 e.target.onerror = null;
-                e.target.src = `https://ui-avatars.com/api/?name=${otherUser?.username || 'User'}&background=4e8cff&color=fff`;
+                e.target.src = `https://ui-avatars.com/api/?name=${otherUser?.username || 'User'}&background=8b5cf6&color=fff`;
               }}
             />
             <div style={{ position: 'relative' }}>
