@@ -169,7 +169,7 @@ const Template = () => {
                   <div className="p-2">
                     <Link to={sellerId ? `/profile/${sellerId}` : '#'}>
                       <img
-                        src={`http://localhost:8080/${template.ProfileImage}`}
+                        src={`https://designdev-final.onrender.com/${template.ProfileImage}`}
                         alt="..."
                         className="rounded-circle"
                         width="68"
@@ -457,7 +457,7 @@ const Template = () => {
                 </div>
                 <img
                   className="rounded shadow-light-lg"
-                  src={`http://localhost:8080/${template.demoImages[0]}`}
+                  src={`https://designdev-final.onrender.com/${template.demoImages[0]}`}
                   alt="..."
                 />
               </a>
