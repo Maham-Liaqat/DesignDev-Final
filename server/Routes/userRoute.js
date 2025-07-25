@@ -1,5 +1,5 @@
 const express=require("express")
-const { HandleSignup, HandleLogin, getUserProfile, updateUserProfile, getUserTemplateStats, getUserByEmail, getUserComprehensiveStats } = require("../controller/UserController")
+const { HandleSignup, HandleLogin, getUserProfile, updateUserProfile, getUserTemplateStats, getUserByEmail, getUserComprehensiveStats, forgotPassword, resetPassword } = require("../controller/UserController")
 const { ValidateSignup, ValidateLogin } = require("../middleware/Validation")
 const { Authentication } = require("../middleware/AuthVerify")
 const upload = require("../middleware/multerConfig")
@@ -8,6 +8,8 @@ const userRoute= express.Router()
 
 userRoute.post("/signup",HandleSignup)
 userRoute.post("/login", HandleLogin)
+userRoute.post("/forgot-password", forgotPassword)
+userRoute.post("/reset-password", resetPassword)
 
 // Profile routes
 userRoute.get("/profile/:userId", getUserProfile)

@@ -56,6 +56,9 @@ const UserSchema = new mongoose.Schema(
       joinDate: { type: Date, default: Date.now },
       lastActive: { type: Date, default: Date.now },
     },
+    // Add for password reset
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   { timestamps: true } 
 );

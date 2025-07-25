@@ -51,10 +51,13 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
+    identifier: "",
     password: ""
   });
   const [loading, setLoading] = useState(false);
   const [logout, setLogout] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -71,45 +74,45 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Signup handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const response = await axios.post(`${API_CONFIG.BASE_URL}/signup`, formData);
-      console.log("Signup response:", response.data);
-
-      // Only proceed to login if signup was successful (status 201 or 200)
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/signup`, {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password
+      });
       if (response.status === 201 || response.status === 200) {
+        // Signup success, now log in
         const res = await axios.post(`${API_CONFIG.BASE_URL}/login`, {
-          email: formData.email,
+          identifier: formData.email, // login expects identifier
           password: formData.password
         });
-
         if (res.status === 200) {
           const { username, token, userId } = res.data;
-          successSignup("Signup successful! You can now log in.");
+          toast.success("Signup Success! You are now logged in.", { position: "top-center", autoClose: 4000 });
           localStorage.setItem("username", username);
           localStorage.setItem("token", token);
           localStorage.setItem("userId", userId);
-          setFormData({ username: "", email: "", password: "" });
+          setFormData({ username: "", email: "", identifier: "", password: "" });
           setLogout(true);
         } else {
-          console.error("Login after signup failed");
+          toast.error("Login after signup failed.", { position: "top-center", autoClose: 4000 });
         }
       }
     } catch (err) {
       if (err.response && err.response.status === 409) {
-        toast.error("User already exists. Please log in.", { position: "top-center" });
-        // Optionally, switch to login modal here
+        toast.error("User already exists. Please log in.", { position: "top-center", autoClose: 4000 });
       } else {
-        notifySignup();
+        toast.error("Signup Failed!", { position: "top-center", autoClose: 4000 });
       }
     } finally {
       setLoading(false);
     }
   };
-
+  // Login handler
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -123,14 +126,32 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
         localStorage.setItem("token", token);
         localStorage.setItem("username", username);
         localStorage.setItem("userId", userId);
-        sucessLogin("Login successful!");
-        setFormData({ username: "", identifier: "", password: "" });
+        toast.success("Login Success!", { position: "top-center", autoClose: 4000 });
+        setFormData({ username: "", email: "", identifier: "", password: "" });
         setLogout(true);
       }
     } catch (err) {
-      notifyLogin();
+      toast.error("Login Failed!", { position: "top-center", autoClose: 4000 });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault();
+    setForgotPasswordLoading(true);
+    try {
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/forgot-password`, { email: forgotPasswordEmail });
+      if (response.data.success) {
+        toast.success("Password reset link sent! Check your email.", { position: "top-center", autoClose: 5000 });
+        setForgotPasswordEmail("");
+      } else {
+        toast.error(response.data.error || "Failed to send reset link.", { position: "top-center", autoClose: 5000 });
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Failed to send reset link.", { position: "top-center", autoClose: 5000 });
+    } finally {
+      setForgotPasswordLoading(false);
     }
   };
 
@@ -379,7 +400,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
                 </button>
               </div>
               <div className="modal-body">
-                <form className="mb-5">
+                <form className="mb-5" onSubmit={handleForgotPasswordSubmit}>
                   <div className="form-group">
                     <label htmlFor="modalForgotpasswordEmail">Email</label>
                     <input
@@ -387,10 +408,13 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
                       className="form-control"
                       id="modalForgotpasswordEmail"
                       placeholder="johndoe@creativelayers.com"
+                      value={forgotPasswordEmail}
+                      onChange={e => setForgotPasswordEmail(e.target.value)}
+                      required
                     />
                   </div>
-                  <button className="btn btn-block btn-primary" type="submit">
-                    RECOVER PASSWORD
+                  <button className="btn btn-block btn-primary" type="submit" disabled={forgotPasswordLoading}>
+                    {forgotPasswordLoading ? "Sending..." : "RECOVER PASSWORD"}
                   </button>
                 </form>
                 <p className="mb-0 font-size-sm text-center">
