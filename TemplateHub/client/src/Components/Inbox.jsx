@@ -16,108 +16,116 @@ const API_URL = API_CONFIG.BASE_URL;
 const InboxContainer = styled.div`
   display: flex;
   height: 100vh;
-  background: #f6f9ff;
-  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: #f8fafc;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow: hidden;
 `;
 
 const LeftPanel = styled.div`
-  width: 350px;
-  background: #fff;
-  border-right: 1px solid #e9ecef;
+  width: 380px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
 const RightPanel = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: #ffffff;
 `;
 
 const Header = styled.div`
-  padding: 20px 24px;
-  border-bottom: 1px solid #e9ecef;
-  background: linear-gradient(135deg, #fff 40%, #f5debc 100%);
+  padding: 24px 28px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
 `;
 
 const HeaderTitle = styled.h2`
-  font-size: 1.6rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #222b45;
+  color: #1e293b;
   margin: 0;
+  letter-spacing: -0.025em;
 `;
 
 const ConversationList = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 16px 20px;
 `;
 
 const ConversationItem = styled.div`
   display: flex;
   align-items: center;
-  padding: 16px;
+  padding: 16px 20px;
   margin-bottom: 8px;
-  border-radius: 12px;
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.2s;
-  background: ${props => props.isSelected ? 'linear-gradient(135deg, #4e8cff 0%, #1DAAF5 100%)' : '#fff'};
-  color: ${props => props.isSelected ? '#fff' : '#333'};
-  box-shadow: ${props => props.isSelected ? '0 4px 12px rgba(78, 140, 255, 0.3)' : '0 1px 3px rgba(0,0,0,0.1)'};
+  transition: all 0.2s ease;
+  background: ${props => props.isSelected ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' : '#ffffff'};
+  color: ${props => props.isSelected ? '#ffffff' : '#1e293b'};
+  box-shadow: ${props => props.isSelected ? '0 4px 12px rgba(99, 102, 241, 0.25)' : '0 1px 2px rgba(0, 0, 0, 0.05)'};
+  border: ${props => props.isSelected ? 'none' : '1px solid #f1f5f9'};
 
   &:hover {
-    background: ${props => props.isSelected ? 'linear-gradient(135deg, #4e8cff 0%, #1DAAF5 100%)' : '#f8f9fa'};
+    background: ${props => props.isSelected ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' : '#f8fafc'};
     transform: translateY(-1px);
-    box-shadow: ${props => props.isSelected ? '0 4px 12px rgba(78, 140, 255, 0.3)' : '0 2px 8px rgba(0,0,0,0.1)'};
+    box-shadow: ${props => props.isSelected ? '0 4px 12px rgba(99, 102, 241, 0.25)' : '0 2px 8px rgba(0, 0, 0, 0.08)'};
   }
 `;
 
 const Avatar = styled.img`
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid ${props => props.isSelected ? '#fff' : '#e9ecef'};
+  border: 2px solid ${props => props.isSelected ? '#ffffff' : '#e2e8f0'};
   margin-right: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const ConversationInfo = styled.div`
   flex: 1;
+  min-width: 0;
 `;
 
 const Username = styled.div`
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   margin-bottom: 4px;
+  color: ${props => props.isSelected ? '#ffffff' : '#1e293b'};
 `;
 
 const LastMessage = styled.div`
-  font-size: 14px;
-  color: ${props => props.isSelected ? 'rgba(255,255,255,0.8)' : '#666'};
+  font-size: 13px;
+  color: ${props => props.isSelected ? 'rgba(255, 255, 255, 0.85)' : '#64748b'};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
+  line-height: 1.4;
 `;
 
 const ChatHeader = styled.div`
   display: flex;
   align-items: center;
-  padding: 16px 24px;
-  background: linear-gradient(135deg, #fff 40%, #f5debc 100%);
-  border-bottom: 1px solid #e9ecef;
+  padding: 20px 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 `;
 
 const ChatAvatar = styled.img`
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(81, 16, 88, 0.87);
+  border: 2px solid #e2e8f0;
   margin-right: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const ChatUserInfo = styled.div`
@@ -127,29 +135,43 @@ const ChatUserInfo = styled.div`
 const ChatUserName = styled.div`
   font-weight: 600;
   font-size: 18px;
-  color: #333;
+  color: #1e293b;
+  margin-bottom: 2px;
 `;
 
 const ChatUserStatus = styled.div`
   font-size: 14px;
-  color: #666;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
+const StatusDot = styled.div`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
 `;
 
 const ChatBody = styled.div`
   flex: 1;
-  padding: 20px;
+  padding: 24px 28px;
   overflow-y: auto;
-  background: #f0f2f5;
-  background-image: linear-gradient(rgba(229, 229, 229, 0.3) 1px, transparent 1px);
-  background-size: 100% 40px;
+  background: #f8fafc;
+  background-image: 
+    linear-gradient(rgba(226, 232, 240, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 232, 240, 0.3) 1px, transparent 1px);
+  background-size: 20px 20px;
 `;
 
 const MessageRow = styled.div`
   display: flex;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   justify-content: ${props => props.isMe ? 'flex-end' : 'flex-start'};
   position: relative;
-  align-items: center;
+  align-items: flex-end;
+  
   &:hover {
     .message-actions {
       opacity: 1;
@@ -158,117 +180,153 @@ const MessageRow = styled.div`
 `;
 
 const MessageBubble = styled.div`
-  max-width: 100%;
-  padding: 12px 16px;
-  border-radius: ${props => props.isMe ? '18px 18px 4px 18px' : '18px 18px 18px 4px'};
-  background: ${props => props.isMe ? '#1DAAF5' : '#ffffff'};
-  color: ${props => props.isMe ? '#fff' : '#333'};
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  max-width: 70%;
+  padding: 12px 18px;
+  border-radius: ${props => props.isMe ? '20px 20px 6px 20px' : '20px 20px 20px 6px'};
+  background: ${props => props.isMe ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)' : '#ffffff'};
+  color: ${props => props.isMe ? '#ffffff' : '#1e293b'};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: relative;
   word-wrap: break-word;
   line-height: 1.5;
-  font-size: 16px;
+  font-size: 15px;
+  border: ${props => props.isMe ? 'none' : '1px solid #e2e8f0'};
 `;
 
 const MessageTime = styled.div`
   font-size: 11px;
-  color: ${props => props.isMe ? 'rgba(255,255,255,0.7)' : '#999'};
+  color: ${props => props.isMe ? 'rgba(255, 255, 255, 0.7)' : '#94a3b8'};
   text-align: right;
-  margin-top: 4px;
+  margin-top: 6px;
+  font-weight: 500;
 `;
 
 const InputArea = styled.form`
   display: flex;
-  padding: 16px;
+  padding: 20px 28px;
   background: #ffffff;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid #e2e8f0;
   align-items: center;
+  gap: 12px;
 `;
 
 const InputField = styled.input`
   flex: 1;
-  padding: 12px 16px;
+  padding: 14px 20px;
   border-radius: 24px;
-  border: 1px solid #e9ecef;
+  border: 1px solid #e2e8f0;
   outline: none;
-  font-size: 16px;
-  margin: 0 8px;
+  font-size: 15px;
+  background: #f8fafc;
+  color: #1e293b;
+  transition: all 0.2s ease;
+  
   &:focus {
-    border-color: #1DAAF5;
+    border-color: #6366f1;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+  
+  &::placeholder {
+    color: #94a3b8;
   }
 `;
 
 const IconButton = styled.button`
   background: transparent;
   border: none;
-  color: #666;
+  color: #64748b;
   font-size: 20px;
   cursor: pointer;
-  padding: 8px;
+  padding: 10px;
   border-radius: 50%;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   &:hover {
-    background: rgba(0,0,0,0.05);
-    color: #4e8cff;
+    background: #f1f5f9;
+    color: #6366f1;
+    transform: scale(1.05);
   }
 `;
 
 const SendButton = styled(IconButton)`
-  color: #4e8cff;
-  background: rgba(78, 140, 255, 0.1);
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+  
   &:hover {
-    background: rgba(78, 140, 255, 0.2);
+    background: rgba(99, 102, 241, 0.15);
+    color: #6366f1;
+  }
+  
+  &:disabled {
+    color: #cbd5e1;
+    background: transparent;
+    cursor: not-allowed;
+    transform: none;
   }
 `;
 
 const FileCard = styled.a`
   display: flex;
   align-items: center;
-  padding: 12px;
-  background: ${props => props.isMe ? 'rgba(255,255,255,0.2)' : '#f8f9fa'};
+  padding: 14px 16px;
+  background: ${props => props.isMe ? 'rgba(255, 255, 255, 0.15)' : '#f8fafc'};
   border-radius: 12px;
   text-decoration: none;
-  color: ${props => props.isMe ? '#fff' : '#333'};
+  color: ${props => props.isMe ? '#ffffff' : '#1e293b'};
   margin: 8px 0;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  border: ${props => props.isMe ? 'none' : '1px solid #e2e8f0'};
+  
   &:hover {
-    background: ${props => props.isMe ? 'rgba(255,255,255,0.3)' : '#e9ecef'};
+    background: ${props => props.isMe ? 'rgba(255, 255, 255, 0.2)' : '#f1f5f9'};
+    transform: translateY(-1px);
   }
 `;
 
 const MessageActions = styled.div`
   position: absolute;
-  top: -24px;
+  top: -32px;
   right: 0;
   display: flex;
   background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  padding: 4px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 6px;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s ease;
+  border: 1px solid #e2e8f0;
 `;
 
 const ActionButton = styled.button`
   background: none;
   border: none;
-  color: #666;
-  padding: 4px;
+  color: #64748b;
+  padding: 6px;
   cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  
   &:hover {
-    color: rgb(78, 140, 255);
+    color: #6366f1;
+    background: #f1f5f9;
   }
 `;
 
 const DeletedMessage = styled.div`
   font-style: italic;
-  color: #999;
-  padding: 12px 16px;
-  background: #f8f9fa;
-  border-radius: 18px;
+  color: #94a3b8;
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-radius: 20px;
   margin-bottom: 8px;
   display: inline-block;
   max-width: 80%;
+  border: 1px solid #e2e8f0;
+  font-size: 14px;
 `;
 
 const EmptyState = styled.div`
@@ -277,26 +335,76 @@ const EmptyState = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #6c757d;
+  color: #64748b;
   text-align: center;
   padding: 40px;
 `;
 
 const EmptyStateIcon = styled.div`
-  font-size: 48px;
-  margin-bottom: 16px;
-  opacity: 0.5;
+  font-size: 64px;
+  margin-bottom: 20px;
+  opacity: 0.6;
 `;
 
 const EmptyStateText = styled.div`
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 600;
   margin-bottom: 8px;
+  color: #1e293b;
 `;
 
 const EmptyStateSubtext = styled.div`
-  font-size: 14px;
-  opacity: 0.7;
+  font-size: 15px;
+  opacity: 0.8;
+  line-height: 1.5;
+`;
+
+const DeleteButton = styled.button`
+  background: #ef4444;
+  border: none;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+  }
+`;
+
+const TypingIndicator = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  color: #64748b;
+  font-size: 13px;
+  font-style: italic;
+`;
+
+const TypingDots = styled.div`
+  display: flex;
+  gap: 2px;
+  
+  span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #94a3b8;
+    animation: typing 1.4s infinite ease-in-out;
+    
+    &:nth-child(1) { animation-delay: -0.32s; }
+    &:nth-child(2) { animation-delay: -0.16s; }
+  }
+  
+  @keyframes typing {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+  }
 `;
 
 // ========== UTILITY FUNCTIONS ========== //
@@ -603,7 +711,7 @@ const Inbox = () => {
                     }}
                   />
                   <ConversationInfo>
-                    <Username>{other?.username || 'User'}</Username>
+                    <Username isSelected={isSelected}>{other?.username || 'User'}</Username>
                     <LastMessage isSelected={isSelected}>
                       {conv.lastMessage || 'Start a conversation...'}
                     </LastMessage>
@@ -632,25 +740,23 @@ const Inbox = () => {
               <ChatUserInfo>
                 <ChatUserName>{otherUser?.username || "User"}</ChatUserName>
                 <ChatUserStatus>
-                  {Object.keys(typingUsers).length > 0 ? "Typing..." : "Online"}
+                  {Object.keys(typingUsers).length > 0 ? (
+                    <>
+                      <TypingDots>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </TypingDots>
+                      <TypingIndicator>Typing...</TypingIndicator>
+                    </>
+                  ) : (
+                    "Online"
+                  )}
                 </ChatUserStatus>
               </ChatUserInfo>
-              <button
-                onClick={() => setDeleteConfirm('all')}
-                style={{
-                  background: '#1DAAF5',
-                  border: 'none',
-                  color: '#E1306C',
-                  fontWeight: 500,
-                  fontSize: 14,
-                  cursor: 'pointer',
-                  padding: '8px 16px',
-                  borderRadius: '8px'
-                }}
-                title="Delete Chat History"
-              >
+              <DeleteButton onClick={() => setDeleteConfirm('all')}>
                 Delete Chat History
-              </button>
+              </DeleteButton>
             </ChatHeader>
 
             {/* Chat Body */}
@@ -664,7 +770,7 @@ const Inbox = () => {
                   return (
                     <MessageRow key={msg._id} isMe={isMine}>
                       <DeletedMessage>
-                        <FaTrash style={{ marginRight: 6, color: '#bbb', verticalAlign: 'middle' }} />
+                        <FaTrash style={{ marginRight: 6, color: '#94a3b8', verticalAlign: 'middle' }} />
                         This message was deleted
                       </DeletedMessage>
                     </MessageRow>
@@ -696,11 +802,11 @@ const Inbox = () => {
                               style={{
                                 width: '100%',
                                 padding: '8px 12px',
-                                border: '1px solid #ddd',
+                                border: '1px solid #e2e8f0',
                                 borderRadius: '8px',
-                                fontSize: '16px',
-                                background: '#fff',
-                                color: '#333'
+                                fontSize: '15px',
+                                background: '#f8fafc',
+                                color: '#1e293b'
                               }}
                               autoFocus
                             />
@@ -709,8 +815,8 @@ const Inbox = () => {
                                 onClick={() => handleEditSave(msg)}
                                 style={{
                                   padding: '4px 8px',
-                                  background: '#4e8cff',
-                                  color: '#fff',
+                                  background: '#6366f1',
+                                  color: '#ffffff',
                                   border: 'none',
                                   borderRadius: '4px',
                                   fontSize: '12px',
@@ -723,8 +829,8 @@ const Inbox = () => {
                                 onClick={handleEditCancel}
                                 style={{
                                   padding: '4px 8px',
-                                  background: '#666',
-                                  color: '#fff',
+                                  background: '#94a3b8',
+                                  color: '#ffffff',
                                   border: 'none',
                                   borderRadius: '4px',
                                   fontSize: '12px',
@@ -756,7 +862,7 @@ const Inbox = () => {
                                     <div style={{ fontWeight: 500 }}>
                                       {msg.originalName ? msg.originalName : (fileUrl.split('/').pop())}
                                     </div>
-                                    <div style={{ fontSize: '12px', color: isMine ? 'rgba(255,255,255,0.7)' : '#666' }}>
+                                    <div style={{ fontSize: '12px', color: isMine ? 'rgba(255,255,255,0.7)' : '#64748b' }}>
                                       Click to download
                                     </div>
                                   </div>
@@ -769,7 +875,7 @@ const Inbox = () => {
                         <MessageTime isMe={isMine}>
                           {msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ""}
                           {isMine && msg.isRead && (
-                            <span style={{ marginLeft: '6px', color: '#4caf50' }}>✓✓</span>
+                            <span style={{ marginLeft: '6px', color: '#10b981' }}>✓✓</span>
                           )}
                           {msg.edited && (
                             <span style={{ marginLeft: '6px', fontStyle: 'italic', fontSize: '0.8em' }}>(edited)</span>
@@ -904,8 +1010,8 @@ const Inbox = () => {
                 onClick={deleteConfirm === 'all' ? handleDeleteAllMessages : handleConfirmDelete}
                 style={{
                   padding: '10px 20px',
-                  background: '#dc3545',
-                  color: '#fff',
+                  background: '#ef4444',
+                  color: '#ffffff',
                   border: 'none',
                   borderRadius: '8px',
                   cursor: 'pointer',
