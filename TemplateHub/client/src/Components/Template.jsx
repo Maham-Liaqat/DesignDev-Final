@@ -169,7 +169,7 @@ const Template = () => {
               <div className="d-md-flex align-items-center mb-6">
                 <div className="border rounded-circle d-inline-block mb-4 mb-md-0 bg-white">
                   <div className="p-2">
-                    <Link to={sellerId ? `/profile/${sellerId}` : '#'}>
+                    <Link to={template.sellerName ? `/profile/${template.sellerName}` : (sellerId ? `/profile/${sellerId}` : '#')}>
                       <img
                         src={`https://designdev-final.onrender.com/${template.ProfileImage}`}
                         alt="..."
@@ -184,7 +184,7 @@ const Template = () => {
                 <div className="ms-md-6">
                   <div className="mb-2 d-flex align-items-center">
                     <h6 className="mb-0 text-white font-size-sm">Created by</h6>
-                    <Link to={sellerId ? `/profile/${sellerId}` : '#'} className="font-size-sm text-white ms-3">
+                    <Link to={template.sellerName ? `/profile/${template.sellerName}` : (sellerId ? `/profile/${sellerId}` : '#')} className="font-size-sm text-white ms-3">
                       {template.sellerName}
                     </Link>
                   </div>
@@ -569,7 +569,7 @@ const Template = () => {
               <h3 className="mb-6">About the Seller</h3>
 
               <div className="about-seller-section">
-                <Link to={sellerId ? `/profile/${sellerId}` : '#'}>
+                <Link to={template.sellerName ? `/profile/${template.sellerName}` : (sellerId ? `/profile/${sellerId}` : '#')}>
                   <img
                     src={`https://designdev-final.onrender.com/${template.ProfileImage}`}
                     alt={template.sellerName}
@@ -578,7 +578,7 @@ const Template = () => {
                     height="100"
                   />
                 </Link>
-                <Link to={sellerId ? `/profile/${sellerId}` : '#'} className="seller-name-link">
+                <Link to={template.sellerName ? `/profile/${template.sellerName}` : (sellerId ? `/profile/${sellerId}` : '#')} className="seller-name-link">
                   {template.sellerName}
                 </Link>
                 {/* ...rest of about seller info... */}

@@ -32,7 +32,7 @@ createRoot(document.getElementById('root')).render(
           
           <Route path='/Cancel' element={<Cancel/>} />
           <Route path='/ReviewPage' element={<ReviewPage/>} />
-            <Route path='/profile/:userId' element={<UserProfile />} />
+            <Route path='/profile/:identifier' element={<UserProfile />} />
             <Route path='/profile/edit' element={<EditProfile />} />
             <Route path='/inbox' element={<Inbox />} />
         </Route>

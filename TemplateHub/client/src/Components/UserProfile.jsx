@@ -17,7 +17,7 @@ const statIcons = [
 ];
 
 const UserProfile = () => {
-  const { userId } = useParams();
+  const { identifier } = useParams();
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({ templateCount: 0, avgRating: 0 });
   const [loading, setLoading] = useState(true);
@@ -25,17 +25,31 @@ const UserProfile = () => {
   const [reviews, setReviews] = useState([]);
   const [deleting, setDeleting] = useState(null);
   const navigate = useNavigate();
-  const isOwnProfile = localStorage.getItem('userId') === userId;
+  
+  // Check if identifier is a MongoDB ObjectId (24 hex characters) or username
+  const isObjectId = /^[0-9a-fA-F]{24}$/.test(identifier);
+  const isOwnProfile = localStorage.getItem('userId') === identifier || 
+                      (user && localStorage.getItem('userId') === user._id);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`${API_URL}/profile/${userId}`);
+        let res;
+        if (isObjectId) {
+          // If it's an ObjectId, fetch by userId
+          res = await axios.get(`${API_URL}/profile/${identifier}`);
+        } else {
+          // If it's a username, fetch by username
+          res = await axios.get(`${API_URL}/profile/by-username/${identifier}`);
+        }
+        
         setUser(res.data.user);
         console.log('Loaded user:', res.data.user);
         console.log('User email for template fetch:', res.data.user?.email);
-        const statsRes = await axios.get(`${API_URL}/profile/${userId}/comprehensive-stats`);
+        
+        const statsRes = await axios.get(`${API_URL}/profile/${res.data.user._id}/comprehensive-stats`);
         setStats(statsRes.data.stats);
+        
         // Fetch templates by user email
         if (res.data.user?.email) {
           const tRes = await axios.get(`${API_URL}/seller/${res.data.user.email}`);
@@ -47,12 +61,22 @@ const UserProfile = () => {
         }
       } catch (err) {
         console.error('Error fetching profile:', err);
+        // If username not found, try as ObjectId
+        if (!isObjectId) {
+          try {
+            const res = await axios.get(`${API_URL}/profile/${identifier}`);
+            setUser(res.data.user);
+            // ... rest of the logic
+          } catch (fallbackErr) {
+            console.error('Fallback error:', fallbackErr);
+          }
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
-  }, [userId]);
+  }, [identifier, isObjectId]);
 
   const handleDeleteTemplate = async (id) => {
     if (!window.confirm('Are you sure you want to delete this template?')) return;
@@ -101,7 +125,7 @@ const UserProfile = () => {
                 // Create or get conversation
                 const convRes = await axios.post(
                   `${API_CONFIG.BASE_URL}/api/chat/conversations`,
-                  { recipientId: userId },
+                  { recipientId: identifier },
                   { headers: { Authorization: `Bearer ${token}` } }
                 );
                 navigate(`/inbox`, { 

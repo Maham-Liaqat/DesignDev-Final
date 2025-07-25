@@ -84,7 +84,7 @@ const EditProfile = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      navigate(`/profile/${localStorage.getItem('userId')}`);
+      navigate(`/profile/${localStorage.getItem('username') || localStorage.getItem('userId')}`);
     } catch (err) {
       // handle error
     } finally {

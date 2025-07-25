@@ -524,7 +524,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
               {logout && (
                 <>
                   <li className="nav-item">
-                    <Link to={`/profile/${localStorage.getItem('userId')}`} className="nav-link">Profile</Link>
+                    <Link to={`/profile/${localStorage.getItem('username') || localStorage.getItem('userId')}`} className="nav-link">Profile</Link>
                   </li>
                   <li className="nav-item">
                     <Link to="/inbox" className="nav-link">Messages</Link>
