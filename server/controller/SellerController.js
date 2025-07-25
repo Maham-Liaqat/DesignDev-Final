@@ -1,6 +1,7 @@
 const Seller = require("../model/SellerMods");
 const User = require("../model/UserModel");
 const StatsService = require("../services/StatsService");
+const mongoose = require('mongoose');
 
 const handleCreate = async (req, res) => {
   try {
@@ -92,7 +93,9 @@ const handleGet = async (req, res) => {
 const getSellerById = async (req, res) => {
   try {
     const { id } = req.params;
-
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid seller ID" });
+    }
     const seller = await Seller.findById(id)
 
     if (!seller) {

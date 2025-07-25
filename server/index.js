@@ -44,6 +44,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/", uploadRoutes);
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // Api Route
 app.get("/", (req, res) => {
