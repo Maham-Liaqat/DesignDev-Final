@@ -34,7 +34,7 @@ const navigate=useNavigate()
     };
   
     try {
-      const res = await fetch(`${API_CONFIG.BASE_URL}/api/reviews`, {
+      const res = await fetch(`${API_CONFIG.BASE_URL}/api/reviews/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
