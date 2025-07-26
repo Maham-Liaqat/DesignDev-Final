@@ -29,8 +29,7 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Uploads and generated files
-server/uploads/
+
 
 # Coverage
 coverage/

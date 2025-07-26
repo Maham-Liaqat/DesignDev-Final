@@ -37,16 +37,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
     }
   };
 
-  const notifyLogin = () => toast.error("Login Failed!", {
-    position: "top-center"
-  });
-  const notifySignup = () => toast.error("Signup Failed!", {
-    position: "top-center"
-  });
-  const successSignup = () => toast.success("Signup Success!", {
-    position: "top-center"
-  });
-  const sucessLogin = () => toast.success("Login Success!", { position: "top-center", toastId: "login-success" });
+
 
   const [formData, setFormData] = useState({
     username: "",
@@ -92,12 +83,13 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
         });
         if (res.status === 200) {
           const { username, token, userId } = res.data;
-          toast.success("Signup Success! You are now logged in.", { position: "top-center", autoClose: 4000 });
+        
           localStorage.setItem("username", username);
           localStorage.setItem("token", token);
           localStorage.setItem("userId", userId);
           setFormData({ username: "", email: "", identifier: "", password: "" });
           setLogout(true);
+                window.location.href = '/';
         } else {
           toast.error("Login after signup failed.", { position: "top-center", autoClose: 4000 });
         }
@@ -126,12 +118,13 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
         localStorage.setItem("token", token);
         localStorage.setItem("username", username);
         localStorage.setItem("userId", userId);
-        toast.success("Login Success!", { position: "top-center", autoClose: 4000 });
+      
         setFormData({ username: "", email: "", identifier: "", password: "" });
         setLogout(true);
+              window.location.href = '/';
       }
     } catch (err) {
-      toast.error("Login Failed!", { position: "top-center", autoClose: 4000 });
+
     } finally {
       setLoading(false);
     }
