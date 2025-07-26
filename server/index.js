@@ -56,6 +56,29 @@ app.use("/api/reviews", reviewRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/sales", salesRouter);
 
+// Debug endpoint to check template data
+app.get("/debug/template/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const Seller = require("./model/SellerMods");
+    const template = await Seller.findById(id);
+    
+    if (!template) {
+      return res.status(404).json({ error: "Template not found" });
+    }
+    
+    res.json({
+      _id: template._id,
+      templateName: template.templateName,
+      sourceCode: template.sourceCode,
+      email: template.email,
+      sellerName: template.sellerName
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/payment/create-session', async (req, res) => {
   try {
     console.log('Received payment request:', req.body); // Debug log
