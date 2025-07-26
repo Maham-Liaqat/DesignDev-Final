@@ -6,9 +6,9 @@ html, body, #root {
 }
 
 /* Allow vertical scroll when needed */
-body {
+/* body {
     overflow-y: auto;
-}
+} */
 
 /* Prevent horizontal scroll */
 html {
