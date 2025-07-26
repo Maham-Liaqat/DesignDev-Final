@@ -6,11 +6,28 @@ html, body, #root {
 }
 
 /* Allow vertical scroll when needed */
-/* body {
+body {
     overflow-y: auto;
-} */
+}
 
 /* Prevent horizontal scroll */
 html {
     overflow-x: hidden;
+}
+
+/* Fix modal overlay issues */
+body.modal-open {
+    overflow: hidden;
+    padding-right: 0 !important;
+}
+
+/* Ensure no elements interfere with modal */
+* {
+    box-sizing: border-box;
+}
+
+/* Fix any potential backdrop issues */
+.modal-backdrop.show {
+    opacity: 0.5;
+    z-index: 1040 !important;
 }

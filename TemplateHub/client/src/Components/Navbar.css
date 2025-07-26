@@ -421,6 +421,8 @@
   max-height: 90vh;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1060;
 }
 
 .modal-body {
@@ -428,6 +430,34 @@
   max-height: 75vh;
   padding: 2rem;
   border-radius: 12px;
+  position: relative;
+  z-index: 1065;
+}
+
+/* Ensure modal backdrop doesn't interfere with form inputs */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+/* Fix any overlay issues */
+.modal-dialog {
+  z-index: 1060;
+}
+
+/* Ensure form inputs are clickable */
+.modal input,
+.modal button,
+.modal a,
+.modal .form-control {
+  position: relative;
+  z-index: 1070;
+  pointer-events: auto;
+}
+
+/* Remove any backdrop-filter that might be causing issues */
+.modal-content {
+  backdrop-filter: none;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 /* Ensure signup/login links are clickable */
@@ -453,12 +483,30 @@
 /* Ensure modal content is above Google OAuth elements */
 .modal-body {
   position: relative;
-  z-index: 5;
+  z-index: 1065;
 }
 
 .modal-body p {
   position: relative;
-  z-index: 10;
+  z-index: 1070;
+}
+
+/* Fix any potential overlay issues with navbar */
+.custom-navbar {
+  z-index: 2000;
+}
+
+/* Ensure modal is always on top */
+.modal.show {
+  z-index: 1050 !important;
+}
+
+.modal.show .modal-dialog {
+  z-index: 1060 !important;
+}
+
+.modal.show .modal-content {
+  z-index: 1065 !important;
 }
 
 /* Prevent body scroll when modal is open */
