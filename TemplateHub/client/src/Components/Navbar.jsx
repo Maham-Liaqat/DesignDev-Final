@@ -98,6 +98,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
           localStorage.setItem("userId", userId);
           setFormData({ username: "", email: "", identifier: "", password: "" });
           setLogout(true);
+                window.location.href = '/';
         } else {
           toast.error("Login after signup failed.", { position: "top-center", autoClose: 4000 });
         }
@@ -129,6 +130,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
         toast.success("Login Success!", { position: "top-center", autoClose: 4000 });
         setFormData({ username: "", email: "", identifier: "", password: "" });
         setLogout(true);
+              window.location.href = '/';
       }
     } catch (err) {
       toast.error("Login Failed!", { position: "top-center", autoClose: 4000 });
