@@ -124,7 +124,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
               window.location.href = '/';
       }
     } catch (err) {
-      toast.error("Login Failed!", { position: "top-center", autoClose: 4000 });
+
     } finally {
       setLoading(false);
     }
