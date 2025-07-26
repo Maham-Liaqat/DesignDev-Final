@@ -5,7 +5,7 @@ const Seller = require("../model/SellerMods");
 const Review = require("../model/ReviewModel");
 const StatsService = require("../services/StatsService");
 const crypto = require("crypto");
-const { sendEmail } = require("../services/emailService");
+const { sendEmail, isSMTPConfigured } = require("../services/emailService");
 
 // ✅ Signup Controller
 const HandleSignup = async (req, res) => {
@@ -215,19 +215,22 @@ const forgotPassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, error: "User not found" });
     }
+    
     // Generate token
     const resetToken = crypto.randomBytes(32).toString("hex");
     const resetTokenExpiry = Date.now() + 1000 * 60 * 60; // 1 hour
+    
+    // Update user with reset token
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = resetTokenExpiry;
     await user.save();
     
-    // For now, return the reset token in the response (for testing)
-    // In production, this should be sent via email
-    const resetLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password?token=${resetToken}`;
+    // Create reset link
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`;
     
     // Try to send email if SMTP is configured
-    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    if (isSMTPConfigured()) {
       try {
         await sendEmail({
           to: user.email,
@@ -235,28 +238,36 @@ const forgotPassword = async (req, res) => {
           html: `<p>You requested a password reset.</p><p>Click <a href='${resetLink}'>here</a> to reset your password. This link will expire in 1 hour.</p>`,
           text: `Reset your password: ${resetLink}`
         });
-        res.status(200).json({ success: true, message: "Password reset link sent to your email." });
-      } catch (emailErr) {
-        console.error("Email sending failed:", emailErr);
-        // Return the reset link for testing purposes
         res.status(200).json({ 
           success: true, 
-          message: "Password reset link generated. Check console for link.",
-          resetLink: resetLink // Only for development/testing
+          message: "Password reset link sent to your email." 
+        });
+      } catch (emailErr) {
+        console.error("Email sending failed:", emailErr);
+        // Fallback: return success with reset link for manual testing
+        res.status(200).json({ 
+          success: true, 
+          message: "Password reset link generated successfully.",
+          resetLink: resetLink,
+          note: "Email service not configured. Use the reset link above."
         });
       }
     } else {
-      // No SMTP configured, return the link for testing
-      console.log("Reset link for testing:", resetLink);
+      // No SMTP configured - return reset link for testing
+      console.log("Password reset link for testing:", resetLink);
       res.status(200).json({ 
         success: true, 
-        message: "Password reset link generated. Check server console for link.",
-        resetLink: resetLink // Only for development/testing
+        message: "Password reset link generated successfully.",
+        resetLink: resetLink,
+        note: "Email service not configured. Use the reset link above for testing."
       });
     }
   } catch (error) {
     console.error("Forgot password error:", error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ 
+      success: false, 
+      error: "Failed to process password reset request. Please try again." 
+    });
   }
 };
 
