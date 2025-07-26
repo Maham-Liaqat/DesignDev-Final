@@ -17,7 +17,7 @@ import { ChatProvider } from './contexts/ChatContext.jsx'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 createRoot(document.getElementById('root')).render(
-  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "your-google-client-id"}>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "625126719914-vuv6sg9gksmpngji7qm1o10p48bng7r4.apps.googleusercontent.com"}>
     <StrictMode>
       <ChatProvider>
         <BrowserRouter>
