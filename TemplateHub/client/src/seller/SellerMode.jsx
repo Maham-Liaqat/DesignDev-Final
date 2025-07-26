@@ -190,6 +190,15 @@ const SellerMode = () => {
     <div className="cyber-seller-portal">
       <div className="holographic-card">
         <div className="cyber-header">
+          <div className="header-navigation">
+            <button 
+              type="button" 
+              className="back-home-btn"
+              onClick={() => navigate("/")}
+            >
+              ← Back to Home
+            </button>
+          </div>
           <h2 className="neon-title glitch" data-text="💎 PREMIUM SELLER PORTAL">
             💎 PREMIUM SELLER PORTAL
           </h2>
