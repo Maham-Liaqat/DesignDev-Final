@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { loadStripe } from '@stripe/stripe-js';
 import { ToastContainer, toast } from 'react-toastify';
 import API_CONFIG from '../config/api';
+import './Template.css';
 
 const Template = () => {
   const { id } = useParams(); // 👈 get ID from URL
