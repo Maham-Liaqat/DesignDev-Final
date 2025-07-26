@@ -226,17 +226,36 @@ const forgotPassword = async (req, res) => {
     await user.save();
     
     // Create reset link
-    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+    const frontendUrl = (process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/$/, ''); // Remove trailing slash
     const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`;
+    
+    // Debug logging
+    console.log('Password reset request for:', user.email);
+    console.log('Frontend URL:', frontendUrl);
+    console.log('Reset link:', resetLink);
     
     // Try to send email if email service is configured
     if (isSMTPConfigured() || isSendGridConfigured()) {
       try {
         await sendEmail({
           to: user.email,
-          subject: "Password Reset Request",
-          html: `<p>You requested a password reset.</p><p>Click <a href='${resetLink}'>here</a> to reset your password. This link will expire in 1 hour.</p>`,
-          text: `Reset your password: ${resetLink}`
+          subject: "Password Reset Request - DesignDev",
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h2 style="color: #333;">Password Reset Request</h2>
+              <p>Hello ${user.username || 'there'},</p>
+              <p>You requested a password reset for your DesignDev account.</p>
+              <p>Click the button below to reset your password:</p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${resetLink}" style="background-color: #4e8cff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Reset Password</a>
+              </div>
+              <p><strong>This link will expire in 1 hour.</strong></p>
+              <p>If you didn't request this password reset, please ignore this email.</p>
+              <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+              <p style="color: #666; font-size: 12px;">This is an automated message from DesignDev. Please do not reply to this email.</p>
+            </div>
+          `,
+          text: `Password Reset Request\n\nHello ${user.username || 'there'},\n\nYou requested a password reset for your DesignDev account.\n\nReset your password: ${resetLink}\n\nThis link will expire in 1 hour.\n\nIf you didn't request this password reset, please ignore this email.`
         });
         res.status(200).json({ 
           success: true, 
