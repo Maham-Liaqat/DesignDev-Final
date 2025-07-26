@@ -1,0 +1,274 @@
+/* Template Detail Page Mobile Responsiveness */
+
+/* Mobile-specific improvements for Template Detail page */
+@media (max-width: 767.98px) {
+  /* Hero section improvements */
+  .bg-dark.pb-9.pt-8.pt-md-11 {
+    padding: 2rem 1rem !important;
+  }
+  
+  /* Template title */
+  .bg-dark h1 {
+    font-size: 1.8rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Template description */
+  .bg-dark p {
+    font-size: 1rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  /* Seller info section */
+  .d-md-flex.align-items-center {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+  
+  .d-md-flex.align-items-center .border.rounded-circle {
+    margin-bottom: 1rem !important;
+    margin-right: 0 !important;
+  }
+  
+  .ms-md-6 {
+    margin-left: 0 !important;
+    text-align: center !important;
+  }
+  
+  /* Feature list improvements */
+  .list-group-item {
+    padding: 0.75rem !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+  
+  .list-group-item .d-flex.align-items-center {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+  
+  .list-group-item h6 {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .list-group-item span {
+    font-size: 0.85rem !important;
+    text-align: right !important;
+    word-break: break-word !important;
+  }
+  
+  /* Button improvements */
+  .d-md-flex .btn {
+    width: 100% !important;
+    margin: 0.5rem 0 !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9rem !important;
+  }
+  
+  .btn-outline-light {
+    width: 100% !important;
+    margin-top: 1rem !important;
+  }
+  
+  /* Description section */
+  .container .pt-8 {
+    padding-top: 2rem !important;
+  }
+  
+  .col-lg-10.col-xl-8.mx-lg-auto {
+    padding: 0 1rem !important;
+  }
+  
+  .mb-8 h3 {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .mb-8 p {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* Read more button */
+  .read-more {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 0 !important;
+  }
+  
+  .read-more .d-inline-flex {
+    font-size: 0.85rem !important;
+  }
+  
+  /* About seller section */
+  .about-seller-section {
+    text-align: center !important;
+    padding: 1rem !important;
+  }
+  
+  .about-seller-section img {
+    width: 80px !important;
+    height: 80px !important;
+    margin: 0 auto 1rem auto !important;
+  }
+  
+  .seller-name-link {
+    display: block !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Reviews section */
+  .media.d-flex {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .media.d-flex .avatar {
+    margin-bottom: 0.75rem !important;
+    margin-right: 0 !important;
+  }
+  
+  .media.d-flex .media-body {
+    width: 100% !important;
+  }
+  
+  .media.d-flex h5 {
+    font-size: 1rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .media.d-flex p {
+    font-size: 0.85rem !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 575.98px) {
+  .bg-dark.pb-9.pt-8.pt-md-11 {
+    padding: 1.5rem 0.75rem !important;
+  }
+  
+  .bg-dark h1 {
+    font-size: 1.6rem !important;
+  }
+  
+  .bg-dark p {
+    font-size: 0.9rem !important;
+  }
+  
+  .list-group-item {
+    padding: 0.5rem !important;
+  }
+  
+  .list-group-item h6 {
+    font-size: 0.8rem !important;
+  }
+  
+  .list-group-item span {
+    font-size: 0.75rem !important;
+  }
+  
+  .d-md-flex .btn {
+    padding: 0.6rem 0.8rem !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .col-lg-10.col-xl-8.mx-lg-auto {
+    padding: 0 0.5rem !important;
+  }
+  
+  .mb-8 h3 {
+    font-size: 1.3rem !important;
+  }
+  
+  .mb-8 p {
+    font-size: 0.85rem !important;
+  }
+  
+  .about-seller-section img {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  
+  .seller-name-link {
+    font-size: 1rem !important;
+  }
+  
+  .media.d-flex {
+    padding: 0.75rem !important;
+  }
+  
+  .media.d-flex h5 {
+    font-size: 0.9rem !important;
+  }
+  
+  .media.d-flex p {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* Improve star rating display on mobile */
+@media (max-width: 767.98px) {
+  .star-rating {
+    width: 80px !important;
+    height: 16px !important;
+  }
+  
+  .star-rating .rating {
+    height: 16px !important;
+  }
+}
+
+/* Fix icon alignment in feature list */
+@media (max-width: 767.98px) {
+  .icon-uxs {
+    min-width: 20px !important;
+    justify-content: center !important;
+  }
+  
+  .list-group-item .d-flex.align-items-center {
+    gap: 0.75rem !important;
+  }
+}
+
+/* Improve button spacing and layout */
+@media (max-width: 767.98px) {
+  .d-md-flex {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  
+  .btn-wide {
+    width: 100% !important;
+    max-width: 300px !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* Better spacing for seller info */
+@media (max-width: 767.98px) {
+  .d-md-flex.align-items-center .mb-2 {
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .d-md-flex.align-items-center .d-flex.align-items-center {
+    justify-content: center !important;
+    gap: 0.5rem !important;
+  }
+  
+  .d-md-flex.align-items-center h6 {
+    font-size: 0.85rem !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .d-md-flex.align-items-center .font-size-sm {
+    font-size: 0.8rem !important;
+  }
+} 
