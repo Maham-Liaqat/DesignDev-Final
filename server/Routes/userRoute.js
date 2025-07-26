@@ -21,4 +21,4 @@ userRoute.get("/profile/:userId/comprehensive-stats", getUserComprehensiveStats)
 userRoute.get("/profile/:userId", getUserProfile)
 userRoute.put("/profile", upload.single('profileImage'), Authentication, updateUserProfile)
 
-module.exports=userRoute
+module.exports=userRoute;
