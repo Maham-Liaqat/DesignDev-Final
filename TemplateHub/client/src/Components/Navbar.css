@@ -1,0 +1,612 @@
+.navbar-brand-img {
+  height: 60px;
+}
+
+@media (max-width: 991.98px) {
+  .custom-navbar .navbar-collapse {
+    background: #23234c;
+    padding: 1rem 0;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .custom-navbar .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 0.25rem;
+  }
+  .custom-navbar .nav-link {
+    padding: 0.75rem 1rem;
+    width: 100%;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .custom-navbar .nav-link:last-child {
+    border-bottom: none;
+  }
+  .custom-navbar .d-xl-block {
+    display: none !important;
+  }
+  .custom-navbar .d-block.d-xl-none {
+    display: block !important;
+  }
+  .custom-navbar .w-100 {
+    width: 100% !important;
+  }
+  
+  /* Better mobile dropdown */
+  .custom-navbar .dropdown-menu {
+    background: rgba(35, 35, 76, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .custom-navbar .dropdown-item {
+    color: #fff;
+    padding: 0.75rem 1rem;
+  }
+  
+  .custom-navbar .dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .custom-navbar .navbar-brand-img {
+    height: 32px;
+  }
+  .custom-navbar .nav-link {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Extra small screen improvements */
+  .hero-content {
+    padding: 1rem 0.75rem;
+    margin: 0 0.5rem;
+  }
+  
+  .hero-content h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .hero-content p {
+    font-size: 0.9rem;
+  }
+  
+  .btn-theme {
+    font-size: 11px;
+    padding: 0.5rem 1rem;
+    min-width: 100px;
+  }
+  
+  /* Compact modal on very small screens */
+  .modal-body {
+    padding: 1rem;
+    max-height: 75vh;
+  }
+  
+  .modal-content {
+    max-height: 80vh;
+    margin: 0.5rem;
+  }
+  
+  /* Smaller search bar */
+  .custom-navbar .w-100 input[type="search"] {
+    font-size: 14px;
+    padding: 0.6rem 1rem;
+  }
+  
+  /* Compact Google OAuth */
+  .google-login-container {
+    margin: 10px 0;
+  }
+  
+  .divider {
+    margin: 15px 0;
+  }
+  
+  .text-underline {
+    font-size: 13px;
+  }
+}
+
+/* Make search bar full width on mobile */
+.custom-navbar .w-100 input[type="search"] {
+  width: 100%;
+  min-width: 0;
+  font-size: 1rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 25px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-navbar .w-100 input[type="search"]:focus {
+  outline: none;
+  border-color: #FFC78B;
+  box-shadow: 0 4px 12px rgba(255, 199, 139, 0.3);
+}
+
+/* Hamburger icon override for better visibility */
+.navbar-toggler {
+  border: none;
+  background: transparent;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.7%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.hero-content-container {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0.6); /* semi-transparent for contrast */
+  padding: 2.5rem 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+  max-width: 700px;
+  width: 100%;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-content h1 {
+  margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 767.98px) {
+  .hero-content {
+    padding: 1.5rem 1rem;
+    max-width: 95vw;
+    margin: 0 1rem;
+  }
+  .hero-content h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  .hero-content p {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  .btn-theme {
+    margin: 0.25rem;
+    min-width: 120px;
+    font-size: 12px;
+    padding: 0.6rem 1.2rem;
+  }
+  
+  /* Mobile-specific improvements */
+  .custom-navbar {
+    padding: 0.5rem 1rem;
+  }
+  
+  .custom-navbar .navbar-brand-img {
+    height: 40px;
+  }
+  
+  .custom-navbar .nav-link {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Stack buttons vertically on mobile */
+  .d-flex.flex-column.flex-sm-row {
+    flex-direction: column !important;
+    gap: 0.5rem;
+  }
+  
+  .d-flex.flex-column.flex-sm-row .btn-theme {
+    width: 100%;
+    max-width: 280px;
+    margin: 0.25rem auto;
+  }
+  
+  /* Improve search bar on mobile */
+  .custom-navbar .w-100 input[type="search"] {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.8rem 1.2rem;
+    border-radius: 20px;
+  }
+  
+  /* Better modal spacing on mobile */
+  .modal-body {
+    padding: 1.5rem;
+    max-height: 80vh;
+  }
+  
+  .modal-content {
+    max-height: 85vh;
+    margin: 1rem;
+  }
+  
+  /* Improve Google OAuth button on mobile */
+  .google-login-container {
+    margin: 15px 0;
+    max-width: 100%;
+  }
+  
+  .google-login-container > div {
+    max-width: 100%;
+  }
+  
+  /* Better divider spacing on mobile */
+  .divider {
+    margin: 20px 0;
+  }
+  
+  /* Improve text readability on mobile */
+  .text-underline {
+    font-size: 14px;
+    padding: 0.5rem 0;
+  }
+} 
+
+/* Mobile dropdown menu styles */
+@media (max-width: 1199.98px) {
+  .custom-navbar .navbar-collapse {
+    background: #23234c;
+    color: #fff;
+    max-width: 45vw;
+    margin: 0 13rem;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 3000;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .custom-navbar .navbar-nav .nav-link {
+    color: #fff !important;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 0 0rem;
+  }
+  .custom-navbar .navbar-nav .nav-link:last-child {
+    border-bottom: none;
+  }
+  .mobile-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    color: #fff;
+    background: none;
+    border: none;
+    z-index: 10;
+    cursor: pointer;
+  }
+} 
+
+.custom-navbar {
+  z-index: 2000;
+} 
+
+.btn-theme {
+  background-color: #FFC78B !important;
+  color: #222 !important;
+  border: none !important;
+  border-radius: 24px !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  padding: 0.75rem 1.5rem;
+  margin: 0.5rem;
+  min-width: 140px;
+  box-shadow: 0 2px 8px rgba(255, 199, 139, 0.3);
+}
+.btn-theme:hover, .btn-theme:focus {
+  background-color: #ffb55c !important;
+  color: #222 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 199, 139, 0.4);
+}
+
+/* Rounded dropdown menu for Become button */
+.dropdown-menu[aria-labelledby="becomeDropdown"],
+.dropdown-menu.show[aria-labelledby="becomeDropdown"] {
+  border-radius: 24px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  font-size: 14px;
+} 
+
+/* Enhanced Google OAuth Styles */
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 24px 0 18px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e0e0e0;
+}
+.divider span {
+  background: #fff;
+  padding: 0 16px;
+  color: #666;
+  font-size: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.google-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 18px 0 18px 0;
+  width: 100%;
+}
+
+.google-login-container > div {
+  width: 100% !important;
+  max-width: 340px;
+  display: flex;
+  justify-content: center;
+}
+
+.google-login-container iframe {
+  width: 100% !important;
+  height: 44px !important;
+  margin: 0 auto;
+}
+
+/* Center the Google button content */
+.google-login-container div[role="button"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+/* Reduce Google logo size inside the button */
+.google-login-container iframe {
+  height: 44px !important;
+}
+.google-login-container svg[aria-label="Google"] {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Modal specific styles for Google button */
+.modal-body .google-login-container {
+  margin: 10px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .google-login-container {
+    margin: 12px 0;
+    max-width: 95vw;
+  }
+  .google-login-container > div {
+    max-width: 95vw;
+  }
+  .divider {
+    margin: 12px 0;
+  }
+}
+
+/* Fix modal overflow and scrollbar issues */
+.modal {
+  overflow: hidden;
+  z-index: 1050;
+}
+
+.modal-content {
+  overflow: hidden;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1060;
+}
+
+.modal-body {
+  overflow-y: auto;
+  max-height: 75vh;
+  padding: 2rem;
+  border-radius: 12px;
+  position: relative;
+  z-index: 1065;
+}
+
+/* Ensure modal backdrop doesn't interfere with form inputs */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+
+/* Fix any overlay issues */
+.modal-dialog {
+  z-index: 1060;
+}
+
+/* Ensure form inputs are clickable */
+.modal input,
+.modal button,
+.modal a,
+.modal .form-control {
+  position: relative;
+  z-index: 1070;
+  pointer-events: auto;
+}
+
+/* Remove any backdrop-filter that might be causing issues */
+.modal-content {
+  backdrop-filter: none;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* Ensure signup/login links are clickable */
+.text-underline {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.text-underline:hover {
+  color: #0056b3;
+}
+
+/* Fix Google OAuth iframe z-index issues */
+.google-login-container iframe {
+  z-index: 1;
+  position: relative;
+}
+
+/* Ensure modal content is above Google OAuth elements */
+.modal-body {
+  position: relative;
+  z-index: 1065;
+}
+
+.modal-body p {
+  position: relative;
+  z-index: 1070;
+}
+
+/* Fix any potential overlay issues with navbar */
+.custom-navbar {
+  z-index: 2000;
+}
+
+/* Ensure modal is always on top */
+.modal.show {
+  z-index: 1050 !important;
+}
+
+.modal.show .modal-dialog {
+  z-index: 1060 !important;
+}
+
+.modal.show .modal-content {
+  z-index: 1065 !important;
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Fix navbar appearing inside modal */
+.custom-navbar {
+  z-index: 1000 !important;
+}
+
+.custom-navbar .navbar-nav {
+  z-index: 1001 !important;
+}
+
+.custom-navbar .nav-link {
+  z-index: 1002 !important;
+}
+
+/* Ensure modal content is isolated from navbar */
+.modal-content {
+  isolation: isolate;
+}
+
+.modal-body {
+  isolation: isolate;
+}
+
+/* Hide any navbar elements that might appear in modal */
+.modal .custom-navbar,
+.modal .navbar-nav,
+.modal .nav-link {
+  display: none !important;
+}
+
+/* Ensure modal has proper stacking context */
+.modal {
+  isolation: isolate;
+}
+
+.modal-dialog {
+  isolation: isolate;
+}
+
+/* Completely isolate modal content from navbar */
+.modal-content {
+  isolation: isolate;
+  position: relative;
+  z-index: 1065;
+}
+
+.modal-body {
+  isolation: isolate;
+  position: relative;
+  z-index: 1065;
+}
+
+/* Hide any navbar elements that might leak into modal */
+.modal *[class*="nav"],
+.modal *[class*="navbar"],
+.modal *[class*="nav-link"],
+.modal *[class*="nav-item"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Ensure modal content is completely separate */
+.modal .modal-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: none;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Fix any potential navbar interference */
+.modal.show {
+  z-index: 1050 !important;
+}
+
+.modal.show .modal-dialog {
+  z-index: 1060 !important;
+}
+
+.modal.show .modal-content {
+  z-index: 1065 !important;
+  position: relative;
+}
+
+/* Ensure navbar stays behind modal */
+.custom-navbar {
+  z-index: 1000 !important;
+}
+
+.custom-navbar .navbar-nav {
+  z-index: 1001 !important;
+}
+
+.custom-navbar .nav-link {
+  z-index: 1002 !important;
+}
+
