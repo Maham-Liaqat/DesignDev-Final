@@ -247,12 +247,12 @@
 
 .modal-content {
   overflow: hidden;
-  max-height: 95vh;
+  max-height: 100vh;
 }
 
 .modal-body {
   /* overflow-y: auto; */
-  max-height: 95vh;
+  max-height: 100vh;
   padding: 1.5rem;
 }
 
