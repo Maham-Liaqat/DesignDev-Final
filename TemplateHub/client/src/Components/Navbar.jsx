@@ -50,6 +50,16 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
   const [logout, setLogout] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false);
+  
+  // Password validation states
+  const [passwordStrength, setPasswordStrength] = useState({
+    length: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    special: false
+  });
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -64,11 +74,46 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    
+    // Password validation for signup form
+    if (e.target.name === 'password') {
+      const password = e.target.value;
+      setPasswordStrength({
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+      });
+    }
+  };
+
+  // Password validation function
+  const validatePassword = (password) => {
+    const validations = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      lowercase: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+    
+    return Object.values(validations).every(Boolean);
   };
 
   // Signup handler
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate password before submission
+    if (!validatePassword(formData.password)) {
+      toast.error("Please ensure your password meets all requirements", { 
+        position: "top-center", 
+        autoClose: 4000 
+      });
+      return;
+    }
+    
     setLoading(true);
     try {
       const response = await axios.post(`${API_CONFIG.BASE_URL}/signup`, {
@@ -329,15 +374,25 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
                   </div>
                   <div className="form-group mb-5">
                     <label htmlFor="modalSigninPassword">Password</label>
-                    <input
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      type="password"
-                      className="form-control"
-                      id="modalSigninPassword"
-                      placeholder="**********"
-                    />
+                    <div className="position-relative">
+                      <input
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        type={showPassword ? "text" : "password"}
+                        className="form-control"
+                        id="modalSigninPassword"
+                        placeholder="**********"
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-sm position-absolute"
+                        style={{ right: "10px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none" }}
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        <i className={`fas fa-${showPassword ? 'eye-slash' : 'eye'}`}></i>
+                      </button>
+                    </div>
                   </div>
                   <div className="d-flex align-items-center mb-5 font-size-sm">
                     <div className="form-check">
@@ -424,16 +479,65 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
                   </div>
                   <div className="form-group mb-5">
                     <label htmlFor="modalSignupPassword">Password</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="modalSignupPassword"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="**********"
-                      required
-                    />
+                    <div className="position-relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        className="form-control"
+                        id="modalSignupPassword"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="**********"
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-sm position-absolute"
+                        style={{ right: "10px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none" }}
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        <i className={`fas fa-${showPassword ? 'eye-slash' : 'eye'}`}></i>
+                      </button>
+                    </div>
+                    
+                    {/* Password Strength Indicator */}
+                    {formData.password && (
+                      <div className="mt-3">
+                        <div className="d-flex align-items-center mb-2">
+                          <small className="text-muted me-2">Password Strength:</small>
+                          <div className="progress flex-grow-1" style={{ height: "4px" }}>
+                            <div 
+                              className={`progress-bar ${validatePassword(formData.password) ? 'bg-success' : 'bg-warning'}`}
+                              style={{ width: `${Object.values(passwordStrength).filter(Boolean).length * 20}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                        
+                        {/* Password Requirements */}
+                        <div className="small text-muted">
+                          <div className={`d-flex align-items-center mb-1 ${passwordStrength.length ? 'text-success' : 'text-muted'}`}>
+                            <i className={`fas fa-${passwordStrength.length ? 'check-circle' : 'circle'} me-2`}></i>
+                            At least 8 characters
+                          </div>
+                          <div className={`d-flex align-items-center mb-1 ${passwordStrength.uppercase ? 'text-success' : 'text-muted'}`}>
+                            <i className={`fas fa-${passwordStrength.uppercase ? 'check-circle' : 'circle'} me-2`}></i>
+                            One uppercase letter
+                          </div>
+                          <div className={`d-flex align-items-center mb-1 ${passwordStrength.lowercase ? 'text-success' : 'text-muted'}`}>
+                            <i className={`fas fa-${passwordStrength.lowercase ? 'check-circle' : 'circle'} me-2`}></i>
+                            One lowercase letter
+                          </div>
+                          <div className={`d-flex align-items-center mb-1 ${passwordStrength.number ? 'text-success' : 'text-muted'}`}>
+                            <i className={`fas fa-${passwordStrength.number ? 'check-circle' : 'circle'} me-2`}></i>
+                            One number
+                          </div>
+                          <div className={`d-flex align-items-center mb-1 ${passwordStrength.special ? 'text-success' : 'text-muted'}`}>
+                            <i className={`fas fa-${passwordStrength.special ? 'check-circle' : 'circle'} me-2`}></i>
+                            One special character
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <button className="btn btn-block btn-primary" type="submit" disabled={loading}>
                     {loading ? "Signing Up..." : "SIGN UP"}
