@@ -49,7 +49,7 @@ const ResetPassword = () => {
           setCountdown(count);
           if (count <= 0) {
             clearInterval(countdownInterval);
-            navigate("/login");
+            navigate("/");
           }
         }, 1000);
         

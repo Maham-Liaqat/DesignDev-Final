@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import Layout from './Components/Layout.jsx'
 import Home from './Components/Home.jsx'
-import { BrowserRouter, Routes, Route } from "react-router-dom"; // Fixed import
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"; // Fixed import
 import Template from './Components/Template.jsx'
 import ScrollToTop from './Components/ScrollTop.jsx'
 import SellerMode from './seller/SellerMode.jsx'
@@ -36,6 +36,7 @@ createRoot(document.getElementById('root')).render(
               <Route path='/inbox' element={<Inbox />} />
             </Route>
             <Route path='/reset-password' element={<ResetPassword />} />
+            <Route path='/login' element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
       </ChatProvider>
