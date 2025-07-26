@@ -14,30 +14,29 @@ import UserProfile from './Components/UserProfile.jsx'
 import EditProfile from './Components/EditProfile.jsx'
 import Inbox from './Components/Inbox.jsx'
 import { ChatProvider } from './contexts/ChatContext.jsx'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 createRoot(document.getElementById('root')).render(
-
-  
-  <StrictMode>
-    <ChatProvider>
-    <BrowserRouter>
-    <ScrollToTop/>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='/template/:id' element={<Template />} />
-
-          <Route path='/seller' element={<SellerMode />} />
-          <Route path='/success' element={<SuccessPage />} />
-          
-          <Route path='/Cancel' element={<Cancel/>} />
-          <Route path='/ReviewPage' element={<ReviewPage/>} />
-            <Route path='/profile/:identifier' element={<UserProfile />} />
-            <Route path='/profile/edit' element={<EditProfile />} />
-            <Route path='/inbox' element={<Inbox />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-    </ChatProvider>
-  </StrictMode>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "your-google-client-id"}>
+    <StrictMode>
+      <ChatProvider>
+        <BrowserRouter>
+          <ScrollToTop/>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path='/template/:id' element={<Template />} />
+              <Route path='/seller' element={<SellerMode />} />
+              <Route path='/success' element={<SuccessPage />} />
+              <Route path='/Cancel' element={<Cancel/>} />
+              <Route path='/ReviewPage' element={<ReviewPage/>} />
+              <Route path='/profile/:identifier' element={<UserProfile />} />
+              <Route path='/profile/edit' element={<EditProfile />} />
+              <Route path='/inbox' element={<Inbox />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ChatProvider>
+    </StrictMode>
+  </GoogleOAuthProvider>
 )
