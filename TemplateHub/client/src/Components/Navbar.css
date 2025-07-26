@@ -197,13 +197,26 @@
   margin: 18px 0 18px 0;
   width: 100%;
 }
+
 .google-login-container > div {
   width: 100% !important;
   max-width: 340px;
+  display: flex;
+  justify-content: center;
 }
+
 .google-login-container iframe {
   width: 100% !important;
   height: 44px !important;
+  margin: 0 auto;
+}
+
+/* Center the Google button content */
+.google-login-container div[role="button"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
 }
 
 /* Reduce Google logo size inside the button */
@@ -246,7 +259,7 @@
 
 .modal-body {
   overflow-y: auto;
-  max-height: 70vh;
+  max-height: 80vh;
   padding: 1.5rem;
 }
 
