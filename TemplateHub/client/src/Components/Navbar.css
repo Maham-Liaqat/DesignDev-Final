@@ -234,3 +234,55 @@
   }
 }
 
+/* Fix modal overflow and scrollbar issues */
+.modal {
+  overflow: hidden;
+}
+
+.modal-content {
+  overflow: hidden;
+  max-height: 90vh;
+}
+
+.modal-body {
+  overflow-y: auto;
+  max-height: 70vh;
+  padding: 1.5rem;
+}
+
+/* Ensure signup/login links are clickable */
+.text-underline {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.text-underline:hover {
+  color: #0056b3;
+}
+
+/* Fix Google OAuth iframe z-index issues */
+.google-login-container iframe {
+  z-index: 1;
+  position: relative;
+}
+
+/* Ensure modal content is above Google OAuth elements */
+.modal-body {
+  position: relative;
+  z-index: 5;
+}
+
+.modal-body p {
+  position: relative;
+  z-index: 10;
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+

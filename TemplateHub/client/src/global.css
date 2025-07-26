@@ -2,5 +2,15 @@ html, body, #root {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-  }
+    overflow-x: hidden;
+}
+
+/* Allow vertical scroll when needed */
+body {
+    overflow-y: auto;
+}
+
+/* Prevent horizontal scroll */
+html {
+    overflow-x: hidden;
+}
