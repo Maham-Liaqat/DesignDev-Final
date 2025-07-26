@@ -1,0 +1,41 @@
+# Node modules
+node_modules/
+TemplateHub/client/node_modules/
+server/node_modules/
+
+.env
+
+# Build output
+dist/
+build/
+TemplateHub/client/dist/
+TemplateHub/client/build/
+server/dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor settings
+.vscode/
+.idea/
+
+
+
+# Coverage
+coverage/
+
+# Misc
+*.local .env 
+.env 
+server/.env 
+.env 
