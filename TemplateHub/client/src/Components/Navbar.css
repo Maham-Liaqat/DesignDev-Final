@@ -514,3 +514,99 @@ body.modal-open {
   overflow: hidden;
 }
 
+/* Fix navbar appearing inside modal */
+.custom-navbar {
+  z-index: 1000 !important;
+}
+
+.custom-navbar .navbar-nav {
+  z-index: 1001 !important;
+}
+
+.custom-navbar .nav-link {
+  z-index: 1002 !important;
+}
+
+/* Ensure modal content is isolated from navbar */
+.modal-content {
+  isolation: isolate;
+}
+
+.modal-body {
+  isolation: isolate;
+}
+
+/* Hide any navbar elements that might appear in modal */
+.modal .custom-navbar,
+.modal .navbar-nav,
+.modal .nav-link {
+  display: none !important;
+}
+
+/* Ensure modal has proper stacking context */
+.modal {
+  isolation: isolate;
+}
+
+.modal-dialog {
+  isolation: isolate;
+}
+
+/* Completely isolate modal content from navbar */
+.modal-content {
+  isolation: isolate;
+  position: relative;
+  z-index: 1065;
+}
+
+.modal-body {
+  isolation: isolate;
+  position: relative;
+  z-index: 1065;
+}
+
+/* Hide any navbar elements that might leak into modal */
+.modal *[class*="nav"],
+.modal *[class*="navbar"],
+.modal *[class*="nav-link"],
+.modal *[class*="nav-item"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Ensure modal content is completely separate */
+.modal .modal-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: none;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Fix any potential navbar interference */
+.modal.show {
+  z-index: 1050 !important;
+}
+
+.modal.show .modal-dialog {
+  z-index: 1060 !important;
+}
+
+.modal.show .modal-content {
+  z-index: 1065 !important;
+  position: relative;
+}
+
+/* Ensure navbar stays behind modal */
+.custom-navbar {
+  z-index: 1000 !important;
+}
+
+.custom-navbar .navbar-nav {
+  z-index: 1001 !important;
+}
+
+.custom-navbar .nav-link {
+  z-index: 1002 !important;
+}
+
