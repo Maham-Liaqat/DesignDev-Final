@@ -42,7 +42,34 @@ if (!fs.existsSync('uploads')) {
 
 const PORT = process.env.PORT || 8080;
 
+// Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Add a simple route to list uploads directory
+app.get('/uploads', (req, res) => {
+  const fs = require('fs');
+  const uploadsPath = path.join(__dirname, 'uploads');
+  
+  try {
+    if (fs.existsSync(uploadsPath)) {
+      const files = fs.readdirSync(uploadsPath);
+      res.json({ 
+        message: 'Uploads directory contents',
+        files: files,
+        count: files.length
+      });
+    } else {
+      res.json({ 
+        message: 'Uploads directory does not exist',
+        files: [],
+        count: 0
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.use("/", uploadRoutes);
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
@@ -67,12 +94,19 @@ app.get("/debug/template/:id", async (req, res) => {
       return res.status(404).json({ error: "Template not found" });
     }
     
+    // Check if source code file exists
+    const fs = require('fs');
+    const filePath = path.join(__dirname, template.sourceCode);
+    const fileExists = fs.existsSync(filePath);
+    
     res.json({
       _id: template._id,
       templateName: template.templateName,
       sourceCode: template.sourceCode,
       email: template.email,
-      sellerName: template.sellerName
+      sellerName: template.sellerName,
+      fileExists: fileExists,
+      filePath: filePath
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
