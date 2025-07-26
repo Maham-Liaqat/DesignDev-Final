@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import { GoogleLogin } from '@react-oauth/google';
 import axios from "axios";
 import Input from "./Input";
 import './Navbar.css';
@@ -146,6 +147,50 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
     } finally {
       setForgotPasswordLoading(false);
     }
+  };
+
+  // Google OAuth handler
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/google`, {
+        credential: credentialResponse.credential
+      });
+
+      if (response.data.success) {
+        const { token, user } = response.data;
+        
+        localStorage.setItem("token", token);
+        localStorage.setItem("username", user.username);
+        localStorage.setItem("userId", user.userId);
+        if (user.profileImage) {
+          localStorage.setItem("profileImage", user.profileImage);
+        }
+        
+        setLogout(true);
+        toast.success(response.data.message, { position: "top-center", autoClose: 3000 });
+        
+        // Close modal and redirect
+        const modal = document.getElementById('accountModal');
+        if (modal) {
+          const bootstrapModal = bootstrap.Modal.getInstance(modal);
+          if (bootstrapModal) {
+            bootstrapModal.hide();
+          }
+        }
+        
+        window.location.href = '/';
+      }
+    } catch (error) {
+      console.error('Google login error:', error);
+      toast.error(error.response?.data?.error || "Google login failed", { position: "top-center", autoClose: 5000 });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    toast.error("Google login failed. Please try again.", { position: "top-center", autoClose: 5000 });
   };
 
   setInterval(() => {
@@ -311,6 +356,26 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
                     {loading ? "LOGIN IN.." : "LOGIN"}
                   </button>
                 </form>
+                
+                {/* Google Login Button */}
+                <div className="text-center mb-3">
+                  <div className="divider">
+                    <span>or</span>
+                  </div>
+                  <div className="google-login-container">
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={handleGoogleError}
+                      useOneTap
+                      theme="outline"
+                      size="large"
+                      text="continue_with"
+                      shape="rectangular"
+                      locale="en"
+                    />
+                  </div>
+                </div>
+                
                 <p className="mb-0 font-size-sm text-center">
                   Don't have an account?{" "}
                   <a className="text-underline" data-bs-toggle="collapse" href="#collapseSignup" role="button" aria-expanded="false" aria-controls="collapseSignup">
@@ -374,6 +439,25 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
                     {loading ? "Signing Up..." : "SIGN UP"}
                   </button>
                 </form>
+                
+                {/* Google Signup Button */}
+                <div className="text-center mb-3">
+                  <div className="divider">
+                    <span>or</span>
+                  </div>
+                  <div className="google-login-container">
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={handleGoogleError}
+                      useOneTap
+                      theme="outline"
+                      size="large"
+                      text="signup_with"
+                      shape="rectangular"
+                      locale="en"
+                    />
+                  </div>
+                </div>
               </div>
               <p className="mb-0 font-size-sm text-center">
                 Already have an account?{" "}

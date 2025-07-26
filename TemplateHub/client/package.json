@@ -12,6 +12,7 @@
   "dependencies": {
     "@emoji-mart/react": "^1.1.1",
     "@fancyapps/fancybox": "^3.5.7",
+    "@react-oauth/google": "^0.12.2",
     "@stripe/stripe-js": "^7.0.0",
     "aos": "^2.3.4",
     "axios": "^1.8.1",

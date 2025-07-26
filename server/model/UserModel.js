@@ -59,6 +59,9 @@ const UserSchema = new mongoose.Schema(
     // Add for password reset
     resetPasswordToken: { type: String },
     resetPasswordExpires: { type: Date },
+    // Google OAuth fields
+    googleId: { type: String, sparse: true },
+    isGoogleUser: { type: Boolean, default: false },
   },
   { timestamps: true } 
 );

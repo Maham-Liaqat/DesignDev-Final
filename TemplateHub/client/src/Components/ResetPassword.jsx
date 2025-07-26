@@ -1,49 +1,82 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import API_CONFIG from '../config/api';
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import API_CONFIG from "../config/api";
 
 const ResetPassword = () => {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const navigate = useNavigate();
-  const location = useLocation();
-  const [newPassword, setNewPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  // Get token from query string
-  const query = new URLSearchParams(location.search);
-  const token = query.get('token');
+  const query = new URLSearchParams(useLocation().search);
+  const token = query.get("token");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!token) {
-      toast.error('Invalid or missing token.', { position: 'top-center' });
+    setError("");
+    setMessage("");
+    setIsLoading(true);
+    
+    if (!newPassword || !confirm) {
+      setError("Please fill in all fields.");
+      setIsLoading(false);
       return;
     }
-    if (!newPassword || newPassword.length < 6) {
-      toast.error('Password must be at least 6 characters.', { position: 'top-center' });
+    if (newPassword !== confirm) {
+      setError("Passwords do not match.");
+      setIsLoading(false);
       return;
     }
-    setLoading(true);
+    
     try {
-      const res = await axios.post(`${API_CONFIG.BASE_URL}/reset-password`, { token, newPassword });
+      const res = await axios.post(`${API_CONFIG.BASE_URL}/reset-password`, {
+        token,
+        newPassword,
+      });
+      
       if (res.data.success) {
-        toast.success('Password reset successful! You can now log in.', { position: 'top-center', autoClose: 4000 });
-        setTimeout(() => navigate('/'), 2000);
+        setMessage("✅ Password reset successful! Redirecting to login...");
+        setIsLoading(false);
+        
+        // Start countdown for auto-navigation
+        let count = 3;
+        setCountdown(count);
+        const countdownInterval = setInterval(() => {
+          count--;
+          setCountdown(count);
+          if (count <= 0) {
+            clearInterval(countdownInterval);
+            navigate("/login");
+          }
+        }, 1000);
+        
       } else {
-        toast.error(res.data.error || 'Failed to reset password.', { position: 'top-center' });
+        setError(res.data.error || "Something went wrong.");
+        setIsLoading(false);
       }
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to reset password.', { position: 'top-center' });
-    } finally {
-      setLoading(false);
+      setError(err.response?.data?.error || "Something went wrong.");
+      setIsLoading(false);
     }
   };
 
+  if (!token) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "80vh" }}>
+        <div className="alert alert-danger shadow" style={{ maxWidth: 400 }}>
+          Invalid or missing reset token.
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container py-5" style={{ maxWidth: 400 }}>
-      <div className="card shadow-lg p-4 mb-5" style={{ borderRadius: 24, background: 'linear-gradient(135deg, #fff 80%, #f5debc 100%)' }}>
-        <h2 style={{ fontWeight: 700, fontSize: 24, marginBottom: 24 }}>Reset Password</h2>
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "80vh", background: "#f0f2f5" }}>
+      <div className="card shadow p-4" style={{ maxWidth: 400, width: "100%", borderRadius: 16 }}>
+        <h2 className="mb-4 text-center" style={{ color: "#4e8cff", fontWeight: 700 }}>Reset Password</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">New Password</label>
@@ -57,8 +90,43 @@ const ResetPassword = () => {
               placeholder="Enter new password"
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
-            {loading ? 'Resetting...' : 'Reset Password'}
+          <div className="mb-3">
+            <label className="form-label">Confirm Password</label>
+            <input
+              type="password"
+              className="form-control"
+              value={confirm}
+              onChange={e => setConfirm(e.target.value)}
+              minLength={6}
+              required
+              placeholder="Confirm new password"
+            />
+          </div>
+          {error && <div className="alert alert-danger py-2">{error}</div>}
+          {message && (
+            <div className="alert alert-success py-2">
+              {message}
+              {countdown > 0 && (
+                <div className="mt-2 text-muted">
+                  Redirecting in {countdown} seconds...
+                </div>
+              )}
+            </div>
+          )}
+          <button 
+            type="submit" 
+            className="btn btn-primary w-100 mt-2" 
+            style={{ background: "#4e8cff", border: "none" }}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Resetting Password...
+              </>
+            ) : (
+              "Reset Password"
+            )}
           </button>
         </form>
       </div>
@@ -66,4 +134,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword; 
+export default ResetPassword;
