@@ -100,7 +100,7 @@ const Template = () => {
       console.log('Creating payment session with:', paymentData);
 
       // 4. Create Stripe session
-      const response = await axios.post(`${API_CONFIG.BASE_URL}/profile`, paymentData, {
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/api/payment/create-session`, paymentData, {
         headers: {
           'Content-Type': 'application/json'
         }

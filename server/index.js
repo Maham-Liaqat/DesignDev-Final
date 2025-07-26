@@ -56,7 +56,7 @@ app.use("/api/reviews", reviewRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/sales", salesRouter);
 
-app.post('/profile', async (req, res) => {
+app.post('/api/payment/create-session', async (req, res) => {
   try {
     console.log('Received payment request:', req.body); // Debug log
 
