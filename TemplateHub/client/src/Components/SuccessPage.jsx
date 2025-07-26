@@ -9,7 +9,7 @@ const Success = () => {
   const sourcePath = query.get('sourcePath');
   const templateId = query.get('templateId');
   useEffect(() => {
-    const downloadFile = () => {
+    const downloadFile = async () => {
       try {
         if (!sourcePath) return;
         
@@ -18,6 +18,27 @@ const Success = () => {
         
         // Create the correct download URL (pointing to backend)
         const downloadUrl = `${API_CONFIG.BASE_URL}/uploads/${filename}`;
+        
+        // Check if file exists before attempting download
+        try {
+          const response = await fetch(downloadUrl, { method: 'HEAD' });
+          if (!response.ok) {
+            console.error('File not found on server:', filename);
+            // Show error message to user
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `
+              <div style="background: #fee; border: 1px solid #fcc; padding: 15px; margin: 10px 0; border-radius: 5px; color: #c33;">
+                <strong>Download Error:</strong> The source code file "${filename}" is not available. 
+                This might be due to a server issue or the file was not uploaded properly. 
+                Please contact the seller for assistance.
+              </div>
+            `;
+            document.querySelector('.success-card')?.appendChild(errorDiv);
+            return;
+          }
+        } catch (error) {
+          console.error('Error checking file availability:', error);
+        }
         
         // Create and trigger download link
         const link = document.createElement('a');
@@ -64,9 +85,21 @@ const Success = () => {
           <div className="download-section">
             <p className="download-text">If the download doesn't start automatically:</p>
             <a 
-              href={`http://localhost:8080/uploads/${displayFilename}`}
+              href={`${API_CONFIG.BASE_URL}/uploads/${displayFilename}`}
               download={displayFilename}
               className="download-button"
+              onClick={async (e) => {
+                try {
+                  const response = await fetch(`${API_CONFIG.BASE_URL}/uploads/${displayFilename}`, { method: 'HEAD' });
+                  if (!response.ok) {
+                    e.preventDefault();
+                    alert(`File "${displayFilename}" is not available. Please contact the seller for assistance.`);
+                  }
+                } catch (error) {
+                  e.preventDefault();
+                  alert(`Error checking file availability. Please contact the seller for assistance.`);
+                }
+              }}
             >
               Click to Download {displayFilename}
             </a>
