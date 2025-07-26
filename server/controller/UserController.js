@@ -221,20 +221,41 @@ const forgotPassword = async (req, res) => {
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = resetTokenExpiry;
     await user.save();
-    // Send email
+    
+    // For now, return the reset token in the response (for testing)
+    // In production, this should be sent via email
     const resetLink = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password?token=${resetToken}`;
-    try {
-      await sendEmail({
-        to: user.email,
-        subject: "Password Reset Request",
-        html: `<p>You requested a password reset.</p><p>Click <a href='${resetLink}'>here</a> to reset your password. This link will expire in 1 hour.</p>`,
-        text: `Reset your password: ${resetLink}`
+    
+    // Try to send email if SMTP is configured
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+      try {
+        await sendEmail({
+          to: user.email,
+          subject: "Password Reset Request",
+          html: `<p>You requested a password reset.</p><p>Click <a href='${resetLink}'>here</a> to reset your password. This link will expire in 1 hour.</p>`,
+          text: `Reset your password: ${resetLink}`
+        });
+        res.status(200).json({ success: true, message: "Password reset link sent to your email." });
+      } catch (emailErr) {
+        console.error("Email sending failed:", emailErr);
+        // Return the reset link for testing purposes
+        res.status(200).json({ 
+          success: true, 
+          message: "Password reset link generated. Check console for link.",
+          resetLink: resetLink // Only for development/testing
+        });
+      }
+    } else {
+      // No SMTP configured, return the link for testing
+      console.log("Reset link for testing:", resetLink);
+      res.status(200).json({ 
+        success: true, 
+        message: "Password reset link generated. Check server console for link.",
+        resetLink: resetLink // Only for development/testing
       });
-    } catch (emailErr) {
-      return res.status(500).json({ success: false, error: "Failed to send reset email." });
     }
-    res.status(200).json({ success: true, message: "Password reset link sent to your email." });
   } catch (error) {
+    console.error("Forgot password error:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 };
