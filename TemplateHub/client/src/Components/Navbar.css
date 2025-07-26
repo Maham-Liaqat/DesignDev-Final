@@ -167,28 +167,25 @@
   font-size: 14px;
 } 
 
-/* Google OAuth Styles */
+/* Enhanced Google OAuth Styles */
 .divider {
   position: relative;
   text-align: center;
-  margin: 20px 0;
+  margin: 24px 0 18px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.divider::before {
+.divider::before, .divider::after {
   content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #e0e0e0;
+  flex: 1;
+  border-bottom: 1px solid #e0e0e0;
 }
-
 .divider span {
-  background: white;
-  padding: 0 15px;
+  background: #fff;
+  padding: 0 16px;
   color: #666;
-  font-size: 14px;
+  font-size: 15px;
   position: relative;
   z-index: 1;
 }
@@ -196,18 +193,26 @@
 .google-login-container {
   display: flex;
   justify-content: center;
-  margin: 15px 0;
+  align-items: center;
+  margin: 18px 0 18px 0;
+  width: 100%;
 }
-
-/* Custom Google button styling */
-.google-login-container div {
+.google-login-container > div {
   width: 100% !important;
-  max-width: 300px;
+  max-width: 340px;
 }
-
 .google-login-container iframe {
   width: 100% !important;
-  height: 40px !important;
+  height: 44px !important;
+}
+
+/* Reduce Google logo size inside the button */
+.google-login-container iframe {
+  height: 44px !important;
+}
+.google-login-container svg[aria-label="Google"] {
+  width: 18px !important;
+  height: 18px !important;
 }
 
 /* Modal specific styles for Google button */
@@ -218,11 +223,14 @@
 /* Responsive adjustments */
 @media (max-width: 576px) {
   .google-login-container {
-    margin: 10px 0;
+    margin: 12px 0;
+    max-width: 95vw;
   }
-  
+  .google-login-container > div {
+    max-width: 95vw;
+  }
   .divider {
-    margin: 15px 0;
+    margin: 12px 0;
   }
 }
 
