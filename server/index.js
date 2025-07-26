@@ -113,6 +113,44 @@ app.get("/debug/template/:id", async (req, res) => {
   }
 });
 
+// Fix template endpoint - remove sourceCode if file doesn't exist
+app.post("/fix/template/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const Seller = require("./model/SellerMods");
+    const template = await Seller.findById(id);
+    
+    if (!template) {
+      return res.status(404).json({ error: "Template not found" });
+    }
+    
+    // Check if source code file exists
+    const fs = require('fs');
+    const filePath = path.join(__dirname, template.sourceCode);
+    const fileExists = fs.existsSync(filePath);
+    
+    if (!fileExists && template.sourceCode) {
+      // Remove the sourceCode field since file doesn't exist
+      await Seller.findByIdAndUpdate(id, { $unset: { sourceCode: 1 } });
+      
+      res.json({
+        message: "Template fixed - sourceCode removed",
+        templateId: id,
+        previousSourceCode: template.sourceCode,
+        fileExists: false
+      });
+    } else {
+      res.json({
+        message: "Template is fine",
+        templateId: id,
+        fileExists: fileExists
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/payment/create-session', async (req, res) => {
   try {
     console.log('Received payment request:', req.body); // Debug log
