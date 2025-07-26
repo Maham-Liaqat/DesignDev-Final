@@ -14,7 +14,7 @@ import Inbox from './Components/Inbox';
 
 const App = () => {
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "your-google-client-id"}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || "625126719914-vuv6sg9gksmpngji7qm1o10p48bng7r4.apps.googleusercontent.com"}>
       <BrowserRouter>
         <Navbar/>
         <Routes>

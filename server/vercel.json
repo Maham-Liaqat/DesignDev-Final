@@ -45,7 +45,7 @@
       "destination": "/client/dist/assets/$1"
     },
     {
-      "source": "/libs/(.*)",
+      "source": "/libs/(.*)", 
       "destination": "/client/dist/libs/$1"
     }
   ]
