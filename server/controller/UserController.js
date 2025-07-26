@@ -5,7 +5,7 @@ const Seller = require("../model/SellerMods");
 const Review = require("../model/ReviewModel");
 const StatsService = require("../services/StatsService");
 const crypto = require("crypto");
-const { sendEmail, isSMTPConfigured } = require("../services/emailService");
+const { sendEmail, isSMTPConfigured, isSendGridConfigured } = require("../services/emailService");
 
 // ✅ Signup Controller
 const HandleSignup = async (req, res) => {
@@ -229,8 +229,8 @@ const forgotPassword = async (req, res) => {
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
     const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`;
     
-    // Try to send email if SMTP is configured
-    if (isSMTPConfigured()) {
+    // Try to send email if email service is configured
+    if (isSMTPConfigured() || isSendGridConfigured()) {
       try {
         await sendEmail({
           to: user.email,
