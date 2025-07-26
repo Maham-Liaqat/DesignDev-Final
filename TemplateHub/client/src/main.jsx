@@ -13,6 +13,7 @@ import ReviewPage from './Components/ReviewPage.jsx'
 import UserProfile from './Components/UserProfile.jsx'
 import EditProfile from './Components/EditProfile.jsx'
 import Inbox from './Components/Inbox.jsx'
+import ResetPassword from './Components/ResetPassword.jsx'
 import { ChatProvider } from './contexts/ChatContext.jsx'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root')).render(
               <Route path='/profile/edit' element={<EditProfile />} />
               <Route path='/inbox' element={<Inbox />} />
             </Route>
+            <Route path='/reset-password' element={<ResetPassword />} />
           </Routes>
         </BrowserRouter>
       </ChatProvider>
