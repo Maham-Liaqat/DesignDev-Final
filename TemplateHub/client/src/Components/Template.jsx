@@ -441,9 +441,11 @@ const Template = () => {
 
             <div className="col-lg-6">
               <a
-                href="https://www.youtube.com/watch?v=9I-Y6VQ6tyI"
+                href={template.demoURL || "#"}
                 className="d-block sk-thumbnail img-ratio-1 rounded mb-5"
                 data-fancybox=""
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <div className="h-60p w-60p rounded-circle bg-white size-20-all d-inline-flex align-items-center justify-content-center position-absolute center z-index-1">
                   <svg
