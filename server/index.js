@@ -73,15 +73,17 @@ app.post('/api/payment/create-session', async (req, res) => {
       throw new Error('Invalid price');
     }
 
-    // Build success URL safely
-    const baseUrl = 'http://localhost:5173/';
+    // Build success URL safely - use production URL for deployed app
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://design-dev-final.vercel.app/' 
+      : 'http://localhost:5173/';
     let successUrl;
     
     if (sourcePath && typeof sourcePath === 'string') {
       const filename = sourcePath.split(/\\|\//).pop(); // Extract just the file name
-      successUrl = `http://localhost:5173/success?sourcePath=${encodeURIComponent(filename)}&templateId=${templateId}`;
+      successUrl = `${baseUrl}success?sourcePath=${encodeURIComponent(filename)}&templateId=${templateId}`;
     } else {
-      successUrl = `http://localhost:5173/success?templateId=${templateId}`;
+      successUrl = `${baseUrl}success?templateId=${templateId}`;
     }
     
 
@@ -103,7 +105,9 @@ app.post('/api/payment/create-session', async (req, res) => {
       }],
       mode: 'payment',
       success_url: successUrl,
-      cancel_url: 'http://localhost:5173/',
+      cancel_url: process.env.NODE_ENV === 'production' 
+        ? 'https://design-dev-final.vercel.app/' 
+        : 'http://localhost:5173/',
     });
 
     res.json({ id: session.id });
