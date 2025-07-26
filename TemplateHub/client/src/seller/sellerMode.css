@@ -142,6 +142,10 @@
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
 }
 
+.back-home-btn {
+  margin-bottom: 1.5rem;
+}
+
 /* Form Grid */
 .cyber-form-grid {
   display: grid;
